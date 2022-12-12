@@ -25,21 +25,19 @@ table 51533355 "Quotation Analysis Header"
         {
             TableRelation = "No. Series";
         }
-        field(4; Status; Option)
+        field(4; Status; Enum "Approval Status")
         {
-            OptionCaption = 'Open,Pending Approval,Approved,Rejected,Cancelled,Completed';
-            OptionMembers = Open,Pending,Approved,Rejected,Cancelled,Completed;
 
             trigger OnValidate()
             begin
                 if EvaluationCriteriaTable.Get("No.") then
                     EvaluationCriteriaTable."Bid Status" := Status;
-                EvaluationCriteriaTable.Validate("Bid Status", Status);
+                EvaluationCriteriaTable.Validate(EvaluationCriterialHeader."Bid Status", Status);
             end;
         }
         field(5; "RFQ No."; Code[20])
         {
-            TableRelation = "Purchase Quote Header"."No." WHERE(Status = CONST(Released));
+            //TableRelation = "Purchase Quote Header"."No." WHERE(Status = CONST(Released));
 
             trigger OnValidate()
             begin
@@ -51,7 +49,7 @@ table 51533355 "Quotation Analysis Header"
                     "Responsibility Center" := PurchQuote."Responsibility Center";
                     Description := PurchQuote."Posting Description";
                     //"Shortcut Dimension 1 Code":=PurchQuote."Shortcut Dimension 1 Code";
-                    "Approved PR" := PurchQuote."Request for Quote No.";//"Approved PR No.";
+                    //"Approved PR" := PurchQuote."Request for Quote No.";//"Approved PR No.";
                     Validate("Approved PR");
                     // "Shortcut Dimension 2 Code":= PurchQuote."Shortcut Dimension 2 Code";
                     // "Repeat Order" := PurchQuote."Repeat Order";
@@ -117,7 +115,7 @@ table 51533355 "Quotation Analysis Header"
                             EvaluationCriteriaTable."Quote No" := "Quote No.";
                             EvaluationCriteriaTable."Bid No." := "No.";
                             EvaluationCriteriaTable."Bid Status" := Status;
-                            EvaluationCriteriaTable.Validate("Bid Status");
+                            EvaluationCriteriaTable.Validate(EvaluationCriterialHeader."Bid Status");
                             EvaluationCriteriaTable.Insert(true);
                         until EvaluationCriterialHeader.Next = 0;
                     end;
@@ -175,7 +173,7 @@ table 51533355 "Quotation Analysis Header"
         field(12; "Responsibility Center"; Code[10])
         {
             Caption = 'Responsibility Center';
-            TableRelation = "Responsibility Center BR";
+            TableRelation = "Responsibility Center";
         }
         field(13; "Document Date"; Date)
         {
@@ -186,7 +184,7 @@ table 51533355 "Quotation Analysis Header"
         field(15; "Awarded Quote"; Code[20])
         {
             TableRelation = "Purchase Header"."No." WHERE("Document Type" = CONST(Quote),
-                                                           "Insurance Ref.No" = FIELD("RFQ No."),
+                                                           //"Insurance Ref.No" = FIELD("RFQ No."),
                                                            Status = CONST(Open));
 
             trigger OnValidate()
@@ -344,7 +342,7 @@ table 51533355 "Quotation Analysis Header"
         }
         field(50024; "Repeat order RFQ No."; Code[20])
         {
-            TableRelation = "Purchase Quote Header"."No.";
+            //TableRelation = "Purchase Quote Header"."No.";
         }
         field(50025; "Re-Awarded"; Boolean)
         {
@@ -419,8 +417,8 @@ table 51533355 "Quotation Analysis Header"
         {
             DataClassification = ToBeClassified;
             TableRelation = "Purchase Header"."No." WHERE("Document Type" = CONST(Quote),
-                                                           Status = CONST(Released),
-                                                           "RFQ No" = FIELD("RFQ No."));
+                                                           Status = CONST(Released));
+            //"RFQ No" = FIELD("RFQ No."));
 
             trigger OnValidate()
             begin
@@ -460,8 +458,8 @@ table 51533355 "Quotation Analysis Header"
                                 QuotationAnalysisLines.Description := PurchLines.Description;
                                 QuotationAnalysisLines."Description 2" := PurchLines."Description 2";
                                 QuotationAnalysisLines."Line Amount" := QuotationAnalysisLines.Quantity * QuotationAnalysisLines.Amount;
-                                QuotationAnalysisLines."Supplier No" := PurchHeader."Supplier No";
-                                QuotationAnalysisLines."Supplier Name" := PurchHeader."Supplier Name";
+                                //QuotationAnalysisLines."Supplier No" := PurchHeader."Supplier No";
+                                //QuotationAnalysisLines."Supplier Name" := PurchHeader."Supplier Name";
                                 QuotationAnalysisLines.Insert(true);
                             until PurchLines.Next = 0;
                         end;
@@ -530,7 +528,7 @@ table 51533355 "Quotation Analysis Header"
         RecordLinkManagement: Codeunit "Record Link Management";
         Analysis: Record "Quotation Analysis Header";
         Text100: Label 'The Approved PR No. %1 you are trying to attach has already been picked in another Bid Analysis No %2.';
-        InternalMemo: Record "Internal Memo";
+        I//nternalMemo: Record "Internal Memo";
         PurchaseQuoteHeader: Record "Purchase Quote Header";
         RecommendEditable: Boolean;
         PurchLines: Record "Purchase Line";

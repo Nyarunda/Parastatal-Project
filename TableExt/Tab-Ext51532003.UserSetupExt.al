@@ -8,5 +8,10 @@ tableextension 51532003 "User Setup Ext" extends "User Setup"
             DataClassification = ToBeClassified;
             TableRelation = Customer."No.";
         }
+        field(6001; "Allow Send Email Proc Officer"; Boolean)
+        {
+            Caption = 'Allow Send Email Proc Officer';
+            DataClassification = ToBeClassified;
+        }
     }
 }
