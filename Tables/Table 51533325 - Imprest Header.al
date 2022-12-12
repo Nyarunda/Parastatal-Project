@@ -141,12 +141,10 @@ table 51533325 "Imprest Header"
                 ValidateShortcutDimCode(1, "Global Dimension 1 Code");
             end;
         }
-        field(35; Status; Option)
+        field(35; Status; Enum "Imprest Approval Status")
         {
             Description = 'Stores the status of the record in the database';
             Editable = true;
-            OptionCaption = 'Open,Pending Approval,Approved,Posted,Cancelled,Rejected';
-            OptionMembers = Open,"Pending Approval",Approved,Posted,Cancelled,Rejected;
         }
         field(38; "Payment Type"; Option)
         {
@@ -416,6 +414,7 @@ table 51533325 "Imprest Header"
 
             trigger OnValidate()
             begin
+                /** 
                 if InternalMemo.Get("Internal Memo No") then
                     "Global Dimension 1 Code" := InternalMemo."Shortcut Dimension 1 Code";
                 "Shortcut Dimension 2 Code" := InternalMemo."Shortcut Dimension 2 Code";
@@ -423,12 +422,13 @@ table 51533325 "Imprest Header"
                 "Shortcut Dimension 4 Code" := InternalMemo."Shortcut Dimension 4 Code";
                 "Shortcut Dimension 5 Code" := InternalMemo."Shortcut Dimension 5 Code";
                 //VALIDATE("Global Dimension 1 Code","Shortcut Dimension 2 Code");
-
+                
                 InternalMemo.Reset;
                 InternalMemo.SetRange("No.", "Internal Memo No");
                 if InternalMemo.FindFirst then begin
                     Purpose := InternalMemo.Description;
                 end;
+                **/
                 DimVal.Reset;
                 DimVal.SetRange(DimVal."Global Dimension No.", 1);
                 DimVal.SetRange(DimVal.Code, "Global Dimension 1 Code");
@@ -440,7 +440,7 @@ table 51533325 "Imprest Header"
                 DimVal.SetRange(DimVal.Code, "Shortcut Dimension 2 Code");
                 if DimVal.Find('-') then
                     "Budget Center Name" := DimVal.Name;
-                Validate("Dimension Set ID", InternalMemo."Dimension Set ID");
+                //Validate("Dimension Set ID", InternalMemo."Dimension Set ID");
             end;
         }
         field(480; "Dimension Set ID"; Integer)
@@ -482,10 +482,11 @@ table 51533325 "Imprest Header"
 
             trigger OnValidate()
             begin
-                InternalMemo.Reset;
+                /**InternalMemo.Reset;
                 InternalMemo.SetRange("No.", "Internal Memo No");
                 if InternalMemo.FindFirst then
                     if ("Date of Departure" <> 0D) and ("Date of Departure" < InternalMemo."Document Date") then Error('Activity can not begin before Internal Memo date');
+                **/
             end;
         }
         field(50004; "Date of Return"; Date)
@@ -520,9 +521,9 @@ table 51533325 "Imprest Header"
                 if "Incoming Document Entry No." = xRec."Incoming Document Entry No." then
                     exit;
                 if "Incoming Document Entry No." = 0 then
-                    IncomingDocument.RemoveReferenceToWorkingDocument(xRec."Incoming Document Entry No.")
-                else
-                    //IncomingDocument.SetimprestDoc(Rec);
+                    IncomingDocument.RemoveReferenceToWorkingDocument(xRec."Incoming Document Entry No.");
+                //else
+                //IncomingDocument.SetimprestDoc(Rec);
             end;
         }
     }
@@ -593,7 +594,6 @@ table 51533325 "Imprest Header"
         Cust.SetRange(Cust."No.", "Account No.");
         if Cust.Find('-') then begin
             Designation := Cust.Designation;
-            "Employee Number" := Cust."Employee No.";
         end;
 
 
@@ -621,7 +621,7 @@ table 51533325 "Imprest Header"
 
     var
         CStatus: Code[20];
-        PVUsers: Record "W/P Budget Buffer";
+        //PVUsers: Record "W/P Budget Buffer";
         UserTemplate: Record "Cash Office User Template";
         GLAcc: Record "G/L Account";
         Cust: Record Customer;
@@ -631,7 +631,7 @@ table 51533325 "Imprest Header"
         NoSeriesMgt: Codeunit NoSeriesManagement;
         GenLedgerSetup: Record "Cash Office Setup";
         RecPayTypes: Record "Receipts and Payment Types";
-        CashierLinks: Record "Cashier Link";
+        //CashierLinks: Record "Cashier Link";
         GLAccount: Record "G/L Account";
         EntryNo: Integer;
         SingleMonth: Boolean;
@@ -656,9 +656,9 @@ table 51533325 "Imprest Header"
         LastDay: Date;
         TotAmt: Decimal;
         DimVal: Record "Dimension Value";
-        PVSteps: Record "Proc. Method Stage Duration";
-        RespCenter: Record "Responsibility Center BR";
-        UserMgt: Codeunit "User Setup Management BR";
+        //PVSteps: Record "Proc. Method Stage Duration";
+        RespCenter: Record "Responsibility Center";
+        UserMgt: Codeunit "User Setup Management";
         Text001: Label 'Your identification is set up to process from %1 %2 only.';
         Pline: Record "Imprest Lines";
         CurrExchRate: Record "Currency Exchange Rate";
@@ -667,7 +667,7 @@ table 51533325 "Imprest Header"
         DImMgt: Codeunit DimensionManagement;
         Hremp: Record "HR Employees";
         BCSetup: Record "Budgetary Control Setup";
-        InternalMemo: Record "Internal Memo";
+    //InternalMemo: Record "Internal Memo";
 
     procedure UpdateHeaderToLine()
     var
