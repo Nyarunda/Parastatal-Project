@@ -14,5 +14,23 @@ tableextension 51532000 "Purchases & Payable Setup Ext" extends "Purchases & Pay
             DataClassification = ToBeClassified;
             TableRelation = "No. Series";
         }
+        field(7006; "Request For Quotation"; Code[20])
+        {
+            Caption = 'Request For Quotation"';
+            DataClassification = ToBeClassified;
+            TableRelation = "No. Series";
+        }
+        field(7007; "Low Value Proucrement No"; Code[20])
+        {
+            Caption = 'Low Value Proucrement No"';
+            DataClassification = ToBeClassified;
+            TableRelation = "No. Series";
+        }
+        field(7008; "Open Tender No"; Code[20])
+        {
+            Caption = 'BLN10106"';
+            DataClassification = ToBeClassified;
+            TableRelation = "No. Series";
+        }
     }
 }

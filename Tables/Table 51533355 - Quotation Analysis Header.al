@@ -32,7 +32,7 @@ table 51533355 "Quotation Analysis Header"
             begin
                 if EvaluationCriteriaTable.Get("No.") then
                     EvaluationCriteriaTable."Bid Status" := Status;
-                EvaluationCriteriaTable.Validate(EvaluationCriterialHeader."Bid Status", Status);
+                //EvaluationCriteriaTable.Validate(EvaluationCriterialHeader."Bid Status", Status);
             end;
         }
         field(5; "RFQ No."; Code[20])
@@ -54,11 +54,11 @@ table 51533355 "Quotation Analysis Header"
                     // "Shortcut Dimension 2 Code":= PurchQuote."Shortcut Dimension 2 Code";
                     // "Repeat Order" := PurchQuote."Repeat Order";
                     //"Repeat order RFQ No." := PurchQuote."RFQ No.";
-                    PurchaseQuoteHeader.Reset;
+                    /**PurchaseQuoteHeader.Reset;
                     PurchaseQuoteHeader.SetRange("No.", "RFQ No.");
                     if PurchaseQuoteHeader.Find('-') then begin
                         "Technical  Pass Score" := PurchaseQuoteHeader."Technical Pass Score";
-                    end;
+                    end; **/
 
 
                 end;
@@ -70,25 +70,25 @@ table 51533355 "Quotation Analysis Header"
                 //END
 
 
+                /**
+                                PurchaseQuoteHeader.Reset;
+                                PurchaseQuoteHeader.SetRange("No.", "RFQ No.");
+                                if PurchaseQuoteHeader.Find('-') then begin
 
-                PurchaseQuoteHeader.Reset;
-                PurchaseQuoteHeader.SetRange("No.", "RFQ No.");
-                if PurchaseQuoteHeader.Find('-') then begin
-
-                    InternalMemo.Reset;
-                    InternalMemo.SetRange("No.", PurchaseQuoteHeader."Internal Requisition No.");
-                    if InternalMemo.Find('-') then begin
-                        "Shortcut Dimension 1 Code" := InternalMemo."Shortcut Dimension 1 Code";
-                        "Shortcut Dimension 2 Code" := InternalMemo."Shortcut Dimension 2 Code";
-                        "Shortcut Dimension 3 Code" := InternalMemo."Shortcut Dimension 3 Code";
-                        "Shortcut Dimension 4 Code" := InternalMemo."Shortcut Dimension 4 Code";
-                        "Shortcut Dimension 5 Code" := InternalMemo."Shortcut Dimension 5 Code";
-                        "Shortcut Dimension 6 Code" := InternalMemo."Shortcut Dimension 6 Code";
-                    end;
-                    Description := PurchaseQuoteHeader."Posting Description";
-                    "Memo No." := PurchaseQuoteHeader."Internal Requisition No.";
-                    "Technical  Pass Score" := PurchaseQuoteHeader."Technical Pass Score";
-                end;
+                                    InternalMemo.Reset;
+                                    InternalMemo.SetRange("No.", PurchaseQuoteHeader."Internal Requisition No.");
+                                    if InternalMemo.Find('-') then begin
+                                        "Shortcut Dimension 1 Code" := InternalMemo."Shortcut Dimension 1 Code";
+                                        "Shortcut Dimension 2 Code" := InternalMemo."Shortcut Dimension 2 Code";
+                                        "Shortcut Dimension 3 Code" := InternalMemo."Shortcut Dimension 3 Code";
+                                        "Shortcut Dimension 4 Code" := InternalMemo."Shortcut Dimension 4 Code";
+                                        "Shortcut Dimension 5 Code" := InternalMemo."Shortcut Dimension 5 Code";
+                                        "Shortcut Dimension 6 Code" := InternalMemo."Shortcut Dimension 6 Code";
+                                    end;
+                                    Description := PurchaseQuoteHeader."Posting Description";
+                                    "Memo No." := PurchaseQuoteHeader."Internal Requisition No.";
+                                    "Technical  Pass Score" := PurchaseQuoteHeader."Technical Pass Score";
+                                end; **/
 
                 //insert evaluation criterias
                 EvaluationCriteriaTable.Reset;
@@ -115,7 +115,7 @@ table 51533355 "Quotation Analysis Header"
                             EvaluationCriteriaTable."Quote No" := "Quote No.";
                             EvaluationCriteriaTable."Bid No." := "No.";
                             EvaluationCriteriaTable."Bid Status" := Status;
-                            EvaluationCriteriaTable.Validate(EvaluationCriterialHeader."Bid Status");
+                            //EvaluationCriteriaTable.Validate(EvaluationCriterialHeader."Bid Status");
                             EvaluationCriteriaTable.Insert(true);
                         until EvaluationCriterialHeader.Next = 0;
                     end;
