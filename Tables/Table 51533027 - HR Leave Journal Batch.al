@@ -1,27 +1,27 @@
 table 51533027 "HR Leave Journal Batch"
 {
-    DataCaptionFields = Name,Description;
-    DrillDownPageID = "TST Financial Evaluation Heade";
-    LookupPageID = "TST Financial Evaluation Heade";
+    DataCaptionFields = Name, Description;
+    //DrillDownPageID = "TST Financial Evaluation Heade";
+    //LookupPageID = "TST Financial Evaluation Heade";
 
     fields
     {
-        field(1;"Journal Template Name";Code[20])
+        field(1; "Journal Template Name"; Code[20])
         {
             Caption = 'Journal Template Name';
             NotBlank = true;
             TableRelation = "HR Leave Journal Template".Name;
         }
-        field(2;Name;Code[20])
+        field(2; Name; Code[20])
         {
             Caption = 'Name';
             NotBlank = true;
         }
-        field(3;Description;Text[50])
+        field(3; Description; Text[50])
         {
             Caption = 'Description';
         }
-        field(4;"Reason Code";Code[20])
+        field(4; "Reason Code"; Code[20])
         {
             Caption = 'Reason Code';
             TableRelation = "Reason Code";
@@ -29,14 +29,14 @@ table 51533027 "HR Leave Journal Batch"
             trigger OnValidate()
             begin
                 if "Reason Code" <> xRec."Reason Code" then begin
-                  InsuranceJnlLine.SetRange("Journal Template Name","Journal Template Name");
-                  InsuranceJnlLine.SetRange("Journal Batch Name",Name);
-                  InsuranceJnlLine.ModifyAll("Reason Code","Reason Code");
-                  Modify;
+                    InsuranceJnlLine.SetRange("Journal Template Name", "Journal Template Name");
+                    InsuranceJnlLine.SetRange("Journal Batch Name", Name);
+                    InsuranceJnlLine.ModifyAll("Reason Code", "Reason Code");
+                    Modify;
                 end;
             end;
         }
-        field(5;"No. Series";Code[20])
+        field(5; "No. Series"; Code[20])
         {
             Caption = 'No. Series';
             TableRelation = "No. Series";
@@ -44,10 +44,10 @@ table 51533027 "HR Leave Journal Batch"
             trigger OnValidate()
             begin
                 if ("No. Series" <> '') and ("No. Series" = "Posting No. Series") then
-                  Validate("Posting No. Series",'');
+                    Validate("Posting No. Series", '');
             end;
         }
-        field(6;"Posting No. Series";Code[20])
+        field(6; "Posting No. Series"; Code[20])
         {
             Caption = 'Posting No. Series';
             TableRelation = "No. Series";
@@ -55,14 +55,14 @@ table 51533027 "HR Leave Journal Batch"
             trigger OnValidate()
             begin
                 if ("Posting No. Series" = "No. Series") and ("Posting No. Series" <> '') then
-                  FieldError("Posting No. Series",StrSubstNo(Text000,"Posting No. Series"));
-                InsuranceJnlLine.SetRange("Journal Template Name","Journal Template Name");
-                InsuranceJnlLine.SetRange("Journal Batch Name",Name);
-                InsuranceJnlLine.ModifyAll("Posting No. Series","Posting No. Series");
+                    FieldError("Posting No. Series", StrSubstNo(Text000, "Posting No. Series"));
+                InsuranceJnlLine.SetRange("Journal Template Name", "Journal Template Name");
+                InsuranceJnlLine.SetRange("Journal Batch Name", Name);
+                InsuranceJnlLine.ModifyAll("Posting No. Series", "Posting No. Series");
                 Modify;
             end;
         }
-        field(18;Type;Option)
+        field(18; Type; Option)
         {
             OptionCaption = 'Positive,Negative';
             OptionMembers = Positive,Negative;
@@ -89,14 +89,14 @@ table 51533027 "HR Leave Journal Batch"
 
             end;
         }
-        field(19;"Posting Description";Text[50])
+        field(19; "Posting Description"; Text[50])
         {
         }
     }
 
     keys
     {
-        key(Key1;"Journal Template Name",Name)
+        key(Key1; "Journal Template Name", Name)
         {
         }
     }
@@ -107,8 +107,8 @@ table 51533027 "HR Leave Journal Batch"
 
     trigger OnDelete()
     begin
-        InsuranceJnlLine.SetRange("Journal Template Name","Journal Template Name");
-        InsuranceJnlLine.SetRange("Journal Batch Name",Name);
+        InsuranceJnlLine.SetRange("Journal Template Name", "Journal Template Name");
+        InsuranceJnlLine.SetRange("Journal Batch Name", Name);
         InsuranceJnlLine.DeleteAll(true);
     end;
 
@@ -120,10 +120,10 @@ table 51533027 "HR Leave Journal Batch"
 
     trigger OnRename()
     begin
-        InsuranceJnlLine.SetRange("Journal Template Name",xRec."Journal Template Name");
-        InsuranceJnlLine.SetRange("Journal Batch Name",xRec.Name);
+        InsuranceJnlLine.SetRange("Journal Template Name", xRec."Journal Template Name");
+        InsuranceJnlLine.SetRange("Journal Batch Name", xRec.Name);
         while InsuranceJnlLine.Find('-') do
-          InsuranceJnlLine.Rename("Journal Template Name",Name,InsuranceJnlLine."Line No.");
+            InsuranceJnlLine.Rename("Journal Template Name", Name, InsuranceJnlLine."Line No.");
     end;
 
     var

@@ -4,24 +4,24 @@ table 51533037 "HR Leave Journal Line"
 
     fields
     {
-        field(1;"Journal Template Name";Code[10])
+        field(1; "Journal Template Name"; Code[10])
         {
             TableRelation = "HR Leave Journal Template".Name;
         }
-        field(2;"Journal Batch Name";Code[10])
+        field(2; "Journal Batch Name"; Code[10])
         {
             Caption = 'Journal Batch Name';
-            TableRelation = "HR Leave Journal Batch".Name WHERE ("Journal Template Name"=FIELD("Journal Template Name"));
+            TableRelation = "HR Leave Journal Batch".Name WHERE("Journal Template Name" = FIELD("Journal Template Name"));
         }
-        field(3;"Line No.";Integer)
+        field(3; "Line No."; Integer)
         {
             AutoIncrement = true;
             Caption = 'Line No.';
         }
-        field(4;"Leave Period";Code[20])
+        field(4; "Leave Period"; Code[20])
         {
             Caption = 'Leave Period';
-            TableRelation = "HR Leave Periods"."Period Code" WHERE (Closed=CONST(false));
+            TableRelation = "HR Leave Periods"."Period Code" WHERE(Closed = CONST(false));
 
             trigger OnValidate()
             begin
@@ -41,53 +41,53 @@ table 51533037 "HR Leave Journal Line"
 
             end;
         }
-        field(6;"Staff No.";Code[20])
+        field(6; "Staff No."; Code[20])
         {
             Caption = 'Staff No.';
-            TableRelation = "HR-Employee"."No.";
+            TableRelation = "HR Employees"."No.";
 
             trigger OnValidate()
             begin
                 if "Staff No." = '' then begin
-                  "Staff Name" := '';
-                  exit;
+                    "Staff Name" := '';
+                    exit;
                 end;
                 FA.Get("Staff No.");
-                "Staff Name" := FA."First Name"+' '+FA."Middle Name"+' '+FA."Last Name";
-                "Shortcut Dimension 1 Code":=FA."Dimension 1 Code";
-                "Shortcut Dimension 2 Code":=FA."Dimension 2 Code";
+                "Staff Name" := FA."First Name" + ' ' + FA."Middle Name" + ' ' + FA."Last Name";
+                //"Shortcut Dimension 1 Code" := FA."Dimension 1 Code";
+                //"Shortcut Dimension 2 Code" := FA."Dimension 2 Code";
             end;
         }
-        field(7;"Staff Name";Text[120])
+        field(7; "Staff Name"; Text[120])
         {
             Caption = 'Staff Name';
             Editable = false;
         }
-        field(8;"Posting Date";Date)
+        field(8; "Posting Date"; Date)
         {
             Caption = 'Posting Date';
         }
-        field(9;"Leave Entry Type";Option)
+        field(9; "Leave Entry Type"; Option)
         {
             Caption = 'Leave Entry Type';
             Editable = true;
             OptionCaption = 'Positive,Negative,Reimbursement';
             OptionMembers = Positive,Negative,Reimbursement;
         }
-        field(10;"Leave Approval Date";Date)
+        field(10; "Leave Approval Date"; Date)
         {
             Caption = 'Leave Approval Date';
             Editable = false;
         }
-        field(11;"Document No.";Code[20])
+        field(11; "Document No."; Code[20])
         {
             Caption = 'Document No.';
         }
-        field(12;"External Document No.";Code[20])
+        field(12; "External Document No."; Code[20])
         {
             Caption = 'External Document No.';
         }
-        field(13;"No. of Days";Decimal)
+        field(13; "No. of Days"; Decimal)
         {
             AutoFormatType = 1;
             Caption = 'No. of Days';
@@ -96,23 +96,23 @@ table 51533037 "HR Leave Journal Line"
             trigger OnValidate()
             begin
                 if LeaveType.Get("Leave Type") then begin
-                if (LeaveType.Posted=true) then begin
-                if "No. of Days">LeaveType.Type then
-                Error(Text001,"Leave Type");
+                    if (LeaveType.Posted = true) then begin
+                        //if "No. of Days" > LeaveType.Type then
+                        Error(Text001, "Leave Type");
 
-                end;
+                    end;
                 end;
             end;
         }
-        field(14;Description;Text[50])
+        field(14; Description; Text[50])
         {
             Caption = 'Description';
         }
-        field(15;"Shortcut Dimension 1 Code";Code[20])
+        field(15; "Shortcut Dimension 1 Code"; Code[20])
         {
             CaptionClass = '1,2,1';
             Caption = 'Shortcut Dimension 1 Code';
-            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(1));
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(1));
 
             trigger OnValidate()
             begin
@@ -122,11 +122,11 @@ table 51533037 "HR Leave Journal Line"
 
             end;
         }
-        field(16;"Shortcut Dimension 2 Code";Code[20])
+        field(16; "Shortcut Dimension 2 Code"; Code[20])
         {
             CaptionClass = '1,2,2';
             Caption = 'Shortcut Dimension 2 Code';
-            TableRelation = "Dimension Value".Code WHERE ("Global Dimension No."=CONST(2));
+            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(2));
 
             trigger OnValidate()
             begin
@@ -135,37 +135,37 @@ table 51533037 "HR Leave Journal Line"
 
             end;
         }
-        field(17;"Reason Code";Code[10])
+        field(17; "Reason Code"; Code[10])
         {
             Caption = 'Reason Code';
             TableRelation = "Reason Code";
         }
-        field(18;"Source Code";Code[10])
+        field(18; "Source Code"; Code[10])
         {
             Caption = 'Source Code';
             TableRelation = "Source Code";
         }
-        field(20;"Index Entry";Boolean)
+        field(20; "Index Entry"; Boolean)
         {
             Caption = 'Index Entry';
         }
-        field(21;"Posting No. Series";Code[10])
+        field(21; "Posting No. Series"; Code[10])
         {
             Caption = 'Posting No. Series';
             TableRelation = "No. Series";
         }
-        field(22;"Leave Type";Code[20])
+        field(22; "Leave Type"; Code[20])
         {
             Editable = true;
-            TableRelation = "Payments-Users".No;
+            //TableRelation = "Payments-Users".No;
 
             trigger OnValidate()
             begin
-                          if LeaveType.Get("Leave Type") then
-                         "Is Annual Leave":=LeaveType."Date Posted";
+                //if LeaveType.Get("Leave Type") then
+                //    "Is Annual Leave" := LeaveType."Date Posted";
             end;
         }
-        field(23;"Leave Recalled No.";Code[20])
+        field(23; "Leave Recalled No."; Code[20])
         {
             Caption = 'Leave Application No.';
 
@@ -187,7 +187,7 @@ table 51533037 "HR Leave Journal Line"
 
             end;
         }
-        field(26;"Leave Period Start Date";Date)
+        field(26; "Leave Period Start Date"; Date)
         {
             TableRelation = "HR Leave Periods"."Starting Date";
 
@@ -198,44 +198,44 @@ table 51533037 "HR Leave Journal Line"
                 //"Leave Period End Date":=CALCDATE('-1D',CALCDATE('12M',"Leave Period Start Date"));
             end;
         }
-        field(27;"Leave Period End Date";Date)
+        field(27; "Leave Period End Date"; Date)
         {
         }
-        field(28;"Positive Transaction Type";Option)
+        field(28; "Positive Transaction Type"; Option)
         {
             OptionCaption = ' ,Leave Allocation,Leave Recall,OverTime';
             OptionMembers = " ","Leave Allocation","Leave Recall",OverTime;
         }
-        field(29;"Negative Transaction Type";Option)
+        field(29; "Negative Transaction Type"; Option)
         {
             OptionCaption = ' ,Leave Taken,Leave Forfeited ';
             OptionMembers = " ","Leave Taken","Leave Forfeited ";
         }
-        field(30;"Leave Application No.";Code[20])
+        field(30; "Leave Application No."; Code[20])
         {
             Caption = 'Leave Application No.';
-            TableRelation = "HR Leave Application"."Application Code";
+            //TableRelation = "HR Leave Application"."Application Code";
 
             trigger OnValidate()
             begin
                 if "Leave Application No." = '' then begin
-                  CreateDim(DATABASE::Insurance,"Leave Application No.");
-                  exit;
+                    CreateDim(DATABASE::Insurance, "Leave Application No.");
+                    exit;
                 end;
                 Insurance.Reset;
-                Insurance.SetRange(Insurance."Application Code","Leave Application No.");
-                if Insurance.Find('-')then begin
-                //Insurance.GET("Leave Application No.");
-                //Insurance.TESTFIELD(Blocked,FALSE);
-                Description := Insurance."Applicant Comments";
-                "Leave Approval Date":=Insurance."Start Date";
-                "No. of Days":=Insurance."Approved days";
-                "Leave Type":=Insurance."Leave Type";
+                Insurance.SetRange(Insurance."Application Code", "Leave Application No.");
+                if Insurance.Find('-') then begin
+                    //Insurance.GET("Leave Application No.");
+                    //Insurance.TESTFIELD(Blocked,FALSE);
+                    Description := Insurance."Applicant Comments";
+                    "Leave Approval Date" := Insurance."Start Date";
+                    "No. of Days" := Insurance."Approved days";
+                    "Leave Type" := Insurance."Leave Type";
                 end;
-                CreateDim(DATABASE::Insurance,"Leave Application No.");
+                CreateDim(DATABASE::Insurance, "Leave Application No.");
             end;
         }
-        field(31;"Is Annual Leave";Boolean)
+        field(31; "Is Annual Leave"; Boolean)
         {
             DataClassification = ToBeClassified;
         }
@@ -243,10 +243,10 @@ table 51533037 "HR Leave Journal Line"
 
     keys
     {
-        key(Key1;"Journal Template Name","Journal Batch Name","Line No.")
+        key(Key1; "Journal Template Name", "Journal Batch Name", "Line No.")
         {
         }
-        key(Key2;"Journal Template Name","Journal Batch Name","Posting Date")
+        key(Key2; "Journal Template Name", "Journal Batch Name", "Posting Date")
         {
             MaintainSQLIndex = false;
         }
@@ -269,27 +269,23 @@ table 51533037 "HR Leave Journal Line"
     begin
 
         HRLeavePeriods.Reset;
-        if HRLeavePeriods.Find('-') then
-        begin
-            "Leave Period Start Date":=HRLeavePeriods."Starting Date";
-             Validate("Leave Period Start Date");
-              if HRLeavePeriods.Find('+') then
-              begin
-                  "Leave Period End Date":=HRLeavePeriods."Starting Date";
-                   Validate("Leave Period End Date");
-              end else
-              begin
-                  Error('No leave periods have been defined');
-              end;
-        end else
-        begin
+        if HRLeavePeriods.Find('-') then begin
+            "Leave Period Start Date" := HRLeavePeriods."Starting Date";
+            Validate("Leave Period Start Date");
+            if HRLeavePeriods.Find('+') then begin
+                "Leave Period End Date" := HRLeavePeriods."Starting Date";
+                Validate("Leave Period End Date");
+            end else begin
+                Error('No leave periods have been defined');
+            end;
+        end else begin
             Error('No leave periods have been defined');
         end;
     end;
 
     var
         Insurance: Record "HR Leave Application";
-        FA: Record "HR-Employee";
+        FA: Record "HR Employees";
         InsuranceJnlTempl: Record "HR Leave Journal Template";
         InsuranceJnlBatch: Record "HR Leave Journal Batch";
         InsuranceJnlLine: Record "HR Leave Journal Line";
@@ -325,10 +321,10 @@ table 51533037 "HR Leave Journal Line"
 
     end;
 
-    procedure CreateDim(Type1: Integer;No1: Code[20])
+    procedure CreateDim(Type1: Integer; No1: Code[20])
     var
-        TableID: array [10] of Integer;
-        No: array [10] of Code[20];
+        TableID: array[10] of Integer;
+        No: array[10] of Code[20];
     begin
         /*TableID[1] := Type1;
         No[1] := No1;
@@ -346,7 +342,7 @@ table 51533037 "HR Leave Journal Line"
 
     end;
 
-    procedure ValidateShortcutDimCode(FieldNumber: Integer;var ShortcutDimCode: Code[20])
+    procedure ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20])
     begin
         /*DimMgt.ValidateDimValueCode(FieldNumber,ShortcutDimCode);
         IF "Line No." <> 0 THEN BEGIN
@@ -360,7 +356,7 @@ table 51533037 "HR Leave Journal Line"
 
     end;
 
-    procedure LookupShortcutDimCode(FieldNumber: Integer;var ShortcutDimCode: Code[20])
+    procedure LookupShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20])
     begin
         /*DimMgt.LookupDimValueCode(FieldNumber,ShortcutDimCode);
         IF "Line No." <> 0 THEN BEGIN
@@ -374,7 +370,7 @@ table 51533037 "HR Leave Journal Line"
 
     end;
 
-    procedure ShowShortcutDimCode(var ShortcutDimCode: array [8] of Code[20])
+    procedure ShowShortcutDimCode(var ShortcutDimCode: array[8] of Code[20])
     begin
         /*IF "Line No." <> 0 THEN
           DimMgt.ShowJnlLineDim(
