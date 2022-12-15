@@ -1283,8 +1283,7 @@ table 51533344 "Purchase Quote Header"
         DocumentSendingProfile: Record "Document Sending Profile";
         DummyReportSelections: Record "Report Selections";
     begin
-        DocumentSendingProfile.TrySendToEMail(
-          DummyReportSelections.Usage::"S.Invoice", Rec, FieldNo("No."), DocTxt, FieldNo("Vendor No."), ShowDialog);
+        DocumentSendingProfile.TrySendToEMail(DummyReportSelections.Usage::"S.Invoice", Rec, FieldNo("No."), DocTxt, FieldNo("Vendor No."), ShowDialog);
     end;
 
     procedure SendRecords()

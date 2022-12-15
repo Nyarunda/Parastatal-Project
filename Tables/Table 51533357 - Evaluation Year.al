@@ -1,7 +1,7 @@
 table 51533357 "Evaluation Year"
 {
-    DrillDownPageID = "Evaluation Year List";
-    LookupPageID = "Evaluation Year List";
+   // DrillDownPageID = "Evaluation Year List";
+    //LookupPageID = "Evaluation Year List";
 
     fields
     {

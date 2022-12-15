@@ -325,13 +325,11 @@ table 51533355 "Quotation Analysis Header"
         field(50020; "Cancelled By"; Text[50])
         {
         }
-        field(50021; "Awarded Quote Status"; Option)
+        field(50021; "Awarded Quote Status"; enum "Approval Status")
         {
             CalcFormula = Lookup("Purchase Header".Status WHERE("Document Type" = CONST(Quote),
                                                                  "No." = FIELD("Awarded Quote")));
             FieldClass = FlowField;
-            OptionCaption = 'Open,Released,Pending Approval,Pending Prepayment,Cancelled';
-            OptionMembers = Open,Released,"Pending Approval","Pending Prepayment",Cancelled;
         }
         field(50022; "Awarded Quote Accountant"; Code[50])
         {
@@ -528,7 +526,6 @@ table 51533355 "Quotation Analysis Header"
         RecordLinkManagement: Codeunit "Record Link Management";
         Analysis: Record "Quotation Analysis Header";
         Text100: Label 'The Approved PR No. %1 you are trying to attach has already been picked in another Bid Analysis No %2.';
-        I//nternalMemo: Record "Internal Memo";
         PurchaseQuoteHeader: Record "Purchase Quote Header";
         RecommendEditable: Boolean;
         PurchLines: Record "Purchase Line";
