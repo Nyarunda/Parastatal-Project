@@ -178,11 +178,10 @@ table 51533308 "Payments Header"
                 ValidateShortcutDimCode(1, "Global Dimension 1 Code");
             end;
         }
-        field(35; Status; Option)
+        field(35; Status; Enum "Payment Status")
         {
             Description = 'Stores the status of the record in the database';
             Editable = true;
-            OptionMembers = Pending,"1st Approval","2nd Approval","Cheque Printing",Posted,Cancelled,Checking,VoteBook,"Pending Approval",Approved;
         }
         field(38; "Payment Type"; Enum "Payment Type")
         {
