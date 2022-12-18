@@ -2,35 +2,39 @@ enum 51532004 "Account Type"
 {
     Extensible = true;
 
-    value(0; "G/L Account")
+    value(0; " ")
+    {
+        Caption = ' ';
+    }
+    value(1; "G/L Account")
     {
         Caption = 'G/L Account';
     }
-    value(1; Customer)
+    value(2; Customer)
     {
         Caption = 'Customer';
     }
-    value(2; Vendor)
+    value(3; Vendor)
     {
         Caption = 'Vendor';
     }
-    value(3; "Bank Account")
+    value(4; "Bank Account")
     {
         Caption = 'Bank Account';
     }
-    value(4; "Fixed Asset")
+    value(5; "Fixed Asset")
     {
         Caption = 'Fixed Asset';
     }
-    value(5; "IC Partner")
+    value(6; "IC Partner")
     {
         Caption = 'IC Partner';
     }
-    value(6; Member)
+    value(7; Member)
     {
         Caption = 'Member';
     }
-    value(7; "Travel Advance")
+    value(8; "Travel Advance")
     {
         Caption = 'Travel Advance';
     }

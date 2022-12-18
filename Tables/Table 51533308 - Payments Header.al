@@ -184,11 +184,9 @@ table 51533308 "Payments Header"
             Editable = true;
             OptionMembers = Pending,"1st Approval","2nd Approval","Cheque Printing",Posted,Cancelled,Checking,VoteBook,"Pending Approval",Approved;
         }
-        field(38; "Payment Type"; Option)
+        field(38; "Payment Type"; Enum "Payment Type")
         {
             Editable = false;
-            OptionCaption = 'Normal,Petty Cash,Express,Cash Purchase,Salary Advance';
-            OptionMembers = Normal,"Petty Cash",Express,"Cash Purchase","Salary Advance";
         }
         field(56; "Shortcut Dimension 2 Code"; Code[20])
         {

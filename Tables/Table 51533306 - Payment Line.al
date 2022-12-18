@@ -127,11 +127,9 @@ table 51533306 "Payment Line"
         field(11; Cashier; Code[50])
         {
         }
-        field(12; "Account Type"; Option)
+        field(12; "Account Type"; Enum "Account Type")
         {
             Caption = 'Account Type';
-            OptionCaption = 'G/L Account,Customer,Vendor,Bank Account,Fixed Asset,IC Partner';
-            OptionMembers = "G/L Account",Customer,Vendor,"Bank Account","Fixed Asset","IC Partner";
 
             trigger OnValidate()
             var

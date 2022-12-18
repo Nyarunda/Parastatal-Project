@@ -10,22 +10,22 @@ page 51533407 "Tariff Codes"
             repeater(Control1102758000)
             {
                 ShowCaption = false;
-                field("Code";Code)
+                field("Code"; Rec.Code)
                 {
                 }
-                field(Description;Description)
+                field(Description; Rec.Description)
                 {
                 }
-                field(Type;Type)
+                field(Type; Rec.Type)
                 {
                 }
-                field(Percentage;Percentage)
+                field(Percentage; Rec.Percentage)
                 {
                 }
-                field("Account Type";"Account Type")
+                field("Account Type"; Rec."Account Type")
                 {
                 }
-                field("Account No.";"Account No.")
+                field("Account No."; Rec."Account No.")
                 {
                 }
             }

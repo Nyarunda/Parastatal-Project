@@ -10,63 +10,63 @@ page 51533402 "Store Requisition Line"
             repeater(Control1102755000)
             {
                 ShowCaption = false;
-                field("Requistion No";"Requistion No")
+                field("Requistion No";Rec."Requistion No")
                 {
                     Visible = false;
                 }
-                field("Line No.";"Line No.")
+                field("Line No.";Rec."Line No.")
                 {
                     Visible = false;
                 }
-                field(Type;Type)
+                field(Type;Rec.Type)
                 {
                 }
-                field("No.";"No.")
+                field("No.";Rec."No.")
                 {
                 }
-                field(Description;Description)
+                field(Description;Rec.Description)
                 {
                     Editable = false;
                 }
-                field("Description 2";"Description 2")
+                field("Description 2";Rec."Description 2")
                 {
                     Caption = 'Remark';
                 }
-                field("Unit of Measure";"Unit of Measure")
+                field("Unit of Measure";Rec."Unit of Measure")
                 {
                 }
-                field("Issuing Store";"Issuing Store")
+                field("Issuing Store";Rec."Issuing Store")
                 {
                 }
-                field("Qty in store";"Qty in store")
+                field("Qty in store";Rec."Qty in store")
                 {
                 }
-                field("Shortcut Dimension 1 Code";"Shortcut Dimension 1 Code")
+                field("Shortcut Dimension 1 Code";Rec."Shortcut Dimension 1 Code")
                 {
                 }
-                field("Shortcut Dimension 2 Code";"Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code";Rec."Shortcut Dimension 2 Code")
                 {
                 }
-                field("Quantity Requested";"Quantity Requested")
+                field("Quantity Requested";Rec."Quantity Requested")
                 {
                 }
-                field("Unit Cost";"Unit Cost")
+                field("Unit Cost";Rec."Unit Cost")
                 {
 
                     trigger OnValidate()
                     begin
                         // IF Type=Type::Item THEN
-                           "Line Amount":="Unit Cost"*Quantity;
+                           Rec."Line Amount":=Rec."Unit Cost"*Rec.Quantity;
                     end;
                 }
-                field("Line Amount";"Line Amount")
+                field("Line Amount";Rec."Line Amount")
                 {
                 }
-                field(Quantity;Quantity)
+                field(Quantity;Rec.Quantity)
                 {
                     Caption = 'Quantity To Issue';
                 }
-                field("Gen. Prod. Posting Group";"Gen. Prod. Posting Group")
+                field("Gen. Prod. Posting Group";Rec."Gen. Prod. Posting Group")
                 {
                 }
             }
@@ -94,7 +94,7 @@ page 51533402 "Store Requisition Line"
 
                     trigger OnAction()
                     begin
-                        OpenItemTrackingLines;
+                        Rec.OpenItemTrackingLines;
                     end;
                 }
             }
@@ -103,12 +103,12 @@ page 51533402 "Store Requisition Line"
 
     trigger OnAfterGetRecord()
     begin
-        ShowShortcutDimCode(ShortcutDimCode);
+        Rec.ShowShortcutDimCode(ShortcutDimCode);
     end;
 
     trigger OnInsertRecord(BelowxRec: Boolean): Boolean
     begin
-        ShowShortcutDimCode(ShortcutDimCode);
+        Rec.ShowShortcutDimCode(ShortcutDimCode);
     end;
 
     var

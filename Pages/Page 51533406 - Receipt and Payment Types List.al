@@ -12,55 +12,55 @@ page 51533406 "Receipt and Payment Types List"
             repeater(Control1102758000)
             {
                 ShowCaption = false;
-                field("Code";Code)
+                field("Code"; Rec.Code)
                 {
                 }
-                field(Description;Description)
+                field(Description; Rec.Description)
                 {
                 }
-                field("Account Type";"Account Type")
+                field("Account Type"; Rec."Account Type")
                 {
                 }
-                field(Type;Type)
+                field(Type; Rec.Type)
                 {
                 }
-                field("VAT Chargeable";"VAT Chargeable")
+                field("VAT Chargeable"; Rec."VAT Chargeable")
                 {
                 }
-                field("VAT Deductible";"VAT Deductible")
+                field("VAT Deductible"; Rec."VAT Deductible")
                 {
                 }
-                field("VAT Code";"VAT Code")
+                field("VAT Code"; Rec."VAT Code")
                 {
                 }
-                field("Withholding Tax Chargeable";"Withholding Tax Chargeable")
+                field("Withholding Tax Chargeable"; Rec."Withholding Tax Chargeable")
                 {
                 }
-                field("Withholding Tax Code";"Withholding Tax Code")
+                field("Withholding Tax Code"; Rec."Withholding Tax Code")
                 {
                 }
-                field("Default Grouping";"Default Grouping")
+                field("Default Grouping"; Rec."Default Grouping")
                 {
                 }
-                field("G/L Account";"G/L Account")
+                field("G/L Account"; Rec."G/L Account")
                 {
                 }
-                field("Pending Voucher";"Pending Voucher")
+                field("Pending Voucher"; Rec."Pending Voucher")
                 {
                 }
-                field("Bank Account";"Bank Account")
+                field("Bank Account"; Rec."Bank Account")
                 {
                 }
-                field("Transation Remarks";"Transation Remarks")
+                field("Transation Remarks"; Rec."Transation Remarks")
                 {
                 }
-                field("Direct Expense";"Direct Expense")
+                field("Direct Expense"; Rec."Direct Expense")
                 {
                 }
-                field("Payment Reference";"Payment Reference")
+                field("Payment Reference"; Rec."Payment Reference")
                 {
                 }
-                field(Blocked;Blocked)
+                field(Blocked; Rec.Blocked)
                 {
                     Visible = false;
                 }
