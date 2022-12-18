@@ -38,4 +38,8 @@ enum 51532004 "Account Type"
     {
         Caption = 'Travel Advance';
     }
+    value(9; "Staff Advance")
+    {
+        Caption = 'Staff Advance';
+    }
 }
