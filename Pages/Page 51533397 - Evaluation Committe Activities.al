@@ -1,6 +1,6 @@
 page 51533397 "Evaluation Committe Activities"
 {
-    Caption = '<Evaluation Committee Activities>';
+    Caption = 'Evaluation Committee Activities';
     DeleteAllowed = true;
     InsertAllowed = true;
     ModifyAllowed = true;
@@ -16,80 +16,80 @@ page 51533397 "Evaluation Committe Activities"
             group(Control1102755007)
             {
                 ShowCaption = false;
-                field("Code";Rec.Code)
+                field("Code"; Rec.Code)
                 {
                     Enabled = false;
                     Importance = Promoted;
                 }
-                field("RFQ No.";Rec."RFQ No.")
+                field("RFQ No."; Rec."RFQ No.")
                 {
                     Caption = 'Tender/RFQ No.';
                 }
-                field("RFQ Description";Rec."RFQ Description")
+                field("RFQ Description"; Rec."RFQ Description")
                 {
                     Enabled = false;
                     Importance = Promoted;
                 }
-                field(Date;Rec.Date)
+                field(Date; Rec.Date)
                 {
                     Caption = 'Evaluation Date';
                     Importance = Promoted;
                 }
-                field(Venue;Rec.Venue)
+                field(Venue; Rec.Venue)
                 {
                     Importance = Promoted;
                 }
-                field("Email Message";Rec."Email Message")
+                field("Email Message"; Rec."Email Message")
                 {
                 }
-                field("Responsibility Center";Rec."Responsibility Center")
+                field("Responsibility Center"; Rec."Responsibility Center")
                 {
                     Visible = true;
                 }
-                field("Approval Date";Rec."Approval Date")
+                field("Approval Date"; Rec."Approval Date")
                 {
                 }
-                field(Closed;Rec.Closed)
+                field(Closed; Rec.Closed)
                 {
                 }
-                field(Status;Rec.Status)
+                field(Status; Rec.Status)
                 {
                 }
-                field("Activity Status";Rec."Activity Status")
-                {
-                    Enabled = false;
-                }
-                field("Year Name";Rec."Year Name")
-                {
-                }
-                field("User ID";Rec."User ID")
+                field("Activity Status"; Rec."Activity Status")
                 {
                     Enabled = false;
                 }
-                field("Date Created";Rec."Date Created")
+                field("Year Name"; Rec."Year Name")
+                {
+                }
+                field("User ID"; Rec."User ID")
                 {
                     Enabled = false;
                 }
-                field("Last Modified By";Rec."Last Modified By")
+                field("Date Created"; Rec."Date Created")
                 {
                     Enabled = false;
                 }
-                field("Last Modified On";Rec."Last Modified On")
+                field("Last Modified By"; Rec."Last Modified By")
+                {
+                    Enabled = false;
+                }
+                field("Last Modified On"; Rec."Last Modified On")
                 {
                     Enabled = false;
                 }
             }
-            part(Control1102755011;"Tender Activity Participants")
+            part(Control1102755011; "Tender Activity Participants")
             {
-                SubPageLink = "Document No."=FIELD(Code),
-                              "RFQ No"=FIELD("RFQ No.");
+                SubPageLink = "Document No." = FIELD(Code),
+                              "RFQ No" = FIELD("RFQ No.");
             }
         }
         area(factboxes)
         {
-            part(Control1102755024;"Tender Activities Factbox")
+            part(Control1102755024; "Tender Activities Factbox")
             {
-                SubPageLink = Code=FIELD(Code);
+                SubPageLink = Code = FIELD(Code);
             }
         }
     }
@@ -110,27 +110,28 @@ page 51533397 "Evaluation Committe Activities"
 
                     trigger OnAction()
                     begin
-                        Rec.TestField(Closed,false);
+                        Rec.TestField(Closed, false);
                         //DELETE ANY PREVIOS RECORDS RELATED TO THIS ACTIVITY
-                        HRActivityApprovalEntry.SetRange(HRActivityApprovalEntry."Document No.",Rec.Code);
+                        HRActivityApprovalEntry.SetRange(HRActivityApprovalEntry."Document No.", Rec.Code);
                         if HRActivityApprovalEntry.Find('-') then
-                        HRActivityApprovalEntry.DeleteAll;
+                            HRActivityApprovalEntry.DeleteAll;
 
                         //GET ONLY ACTIVE EMPLOYEES
-                        InternalMemoLines.Reset;
-                        InternalMemoLines.SetRange(InternalMemoLines."Document No.",Rec."Memo No.");
-                        InternalMemoLines.FindFirst;
-                        begin
-                              HRActivityApprovalEntry.Reset;
-                                  repeat
-                                      HRActivityApprovalEntry.Init;
-                                      HRActivityApprovalEntry.Participant:=InternalMemoLines."Employee No.";
-                                      HRActivityApprovalEntry."Document No.":=Rec.Code;
-                                     HRActivityApprovalEntry.Validate( HRActivityApprovalEntry.Participant);
-                                      HRActivityApprovalEntry.Insert;
-                                  until InternalMemoLines.Next=0;
-                                  Message('Completed Successfully');
-                        end;
+                        /** InternalMemoLines.Reset;
+                         InternalMemoLines.SetRange(InternalMemoLines."Document No.",Rec."Memo No.");
+                         InternalMemoLines.FindFirst;
+                         begin
+                               HRActivityApprovalEntry.Reset;
+                                   repeat
+                                       HRActivityApprovalEntry.Init;
+                                       HRActivityApprovalEntry.Participant:=InternalMemoLines."Employee No.";
+                                       HRActivityApprovalEntry."Document No.":=Rec.Code;
+                                      HRActivityApprovalEntry.Validate( HRActivityApprovalEntry.Participant);
+                                       HRActivityApprovalEntry.Insert;
+                                   until InternalMemoLines.Next=0;
+                                   Message('Completed Successfully');
+                         end;
+                         **/
                     end;
                 }
                 action("Notify Participants ")
@@ -145,36 +146,35 @@ page 51533397 "Evaluation Committe Activities"
                         WorkingString: Text;
                         String1: Text;
                     begin
-                        Rec.TestField(Status,Rec.Status::Approved);
+                        Rec.TestField(Status, Rec.Status::Approved);
                         HRActivityApprovalEntry.Reset;
-                        HRActivityApprovalEntry.SetRange(HRActivityApprovalEntry."Document No.",Rec.Code);
-                        if HRActivityApprovalEntry.Find('-') then
-                        begin
-                        repeat
-                        // IF Status <> Status::Approved THEN
-                        // ERROR('You Cannot notify a participant when the application is not approved');
-                        
-                        /*SMTP.CreateMessage('Dear'+' '+HRActivityApprovalEntry."Partipant Name",'erp@ufaa.go.ke',HRActivityApprovalEntry."Participant Email",
-                           "RFQ Description","Email Message"+'. '+ 'On' + ' ' + FORMAT(Date) +'  '+FORMAT(Time)+'At'+Venue+'. '+HRActivityApprovalEntry."Email Message"+'. '+'Please plan to attend',TRUE);
-                        */
-                        
-                        Astring:=HRActivityApprovalEntry."Partipant Name";
-                        
-                        WorkingString:=ConvertStr(Astring,' ',',');
-                        String1:=SelectStr(1,WorkingString);
-                        
-                        /*SMTP.CreateMessage('Dear'+' '+String1,'erp@ufaa.go.ke',HRActivityApprovalEntry."Participant Email",
-                        'Procurement Committee','Dear'+' '+String1+' '+"Email Message"+' '+'Evaluation of '
-                         + "RFQ Description"+' '+ 'On' + '  ' + Format(Date) +'  '+
-                           Format(Time)+'At ' +Venue+'. '
-                           +'Thank you',true); */
-                        
-                         SMTP.Send();
-                        HRActivityApprovalEntry.Notified:=true;
-                        HRActivityApprovalEntry.Modify;
-                        until HRActivityApprovalEntry.Next=0;
-                        Message('[%1] Evaluation Committee Members Have Been Notified About This Activity', HRActivityApprovalEntry.Count);
-                        
+                        HRActivityApprovalEntry.SetRange(HRActivityApprovalEntry."Document No.", Rec.Code);
+                        if HRActivityApprovalEntry.Find('-') then begin
+                            repeat
+                                // IF Status <> Status::Approved THEN
+                                // ERROR('You Cannot notify a participant when the application is not approved');
+
+                                /*SMTP.CreateMessage('Dear'+' '+HRActivityApprovalEntry."Partipant Name",'erp@ufaa.go.ke',HRActivityApprovalEntry."Participant Email",
+                                   "RFQ Description","Email Message"+'. '+ 'On' + ' ' + FORMAT(Date) +'  '+FORMAT(Time)+'At'+Venue+'. '+HRActivityApprovalEntry."Email Message"+'. '+'Please plan to attend',TRUE);
+                                */
+
+                                Astring := HRActivityApprovalEntry."Partipant Name";
+
+                                WorkingString := ConvertStr(Astring, ' ', ',');
+                                String1 := SelectStr(1, WorkingString);
+
+                                /*SMTP.CreateMessage('Dear'+' '+String1,'erp@ufaa.go.ke',HRActivityApprovalEntry."Participant Email",
+                                'Procurement Committee','Dear'+' '+String1+' '+"Email Message"+' '+'Evaluation of '
+                                 + "RFQ Description"+' '+ 'On' + '  ' + Format(Date) +'  '+
+                                   Format(Time)+'At ' +Venue+'. '
+                                   +'Thank you',true); */
+
+                                SMTP.Send();
+                                HRActivityApprovalEntry.Notified := true;
+                                HRActivityApprovalEntry.Modify;
+                            until HRActivityApprovalEntry.Next = 0;
+                            Message('[%1] Evaluation Committee Members Have Been Notified About This Activity', HRActivityApprovalEntry.Count);
+
                         end
 
                     end;
@@ -187,14 +187,14 @@ page 51533397 "Evaluation Committe Activities"
 
                     trigger OnAction()
                     begin
-                        Rec.TestField(Closed,false);
-                        Rec.Closed:=true;
-                        Rec."Activity Status":=Rec."Activity Status"::Complete;
-                        Rec."Last Modified At":=Time;
-                        Rec."Last Modified By":=UserId;
-                        Rec."Last Modified On":=Today;
+                        Rec.TestField(Closed, false);
+                        Rec.Closed := true;
+                        Rec."Activity Status" := Rec."Activity Status"::Complete;
+                        Rec."Last Modified At" := Time;
+                        Rec."Last Modified By" := UserId;
+                        Rec."Last Modified On" := Today;
                         Rec.Modify;
-                        Message('Tender Activity :: %1 :: Has Been Closed',Rec."RFQ Description");
+                        Message('Tender Activity :: %1 :: Has Been Closed', Rec."RFQ Description");
                         //CurrPage.CLOSE;
                     end;
                 }
@@ -207,15 +207,15 @@ page 51533397 "Evaluation Committe Activities"
 
                     trigger OnAction()
                     begin
-                        if Rec."Activity Status"<>Rec."Activity Status"::Planning then
-                          Error(Text002,Rec.Code);
-                        Rec.TestField(Closed,false);
-                        Rec."Activity Status":=Rec."Activity Status"::"On going";
-                        Rec."Last Modified At":=Time;
-                        Rec."Last Modified By":=UserId;
-                        Rec."Last Modified On":=Today;
+                        if Rec."Activity Status" <> Rec."Activity Status"::Planning then
+                            Error(Text002, Rec.Code);
+                        Rec.TestField(Closed, false);
+                        Rec."Activity Status" := Rec."Activity Status"::"On going";
+                        Rec."Last Modified At" := Time;
+                        Rec."Last Modified By" := UserId;
+                        Rec."Last Modified On" := Today;
                         Rec.Modify;
-                        Message('Tender Activity :: %1 :: Is Currently On-Going',Rec."RFQ Description");
+                        Message('Tender Activity :: %1 :: Is Currently On-Going', Rec."RFQ Description");
                         //CurrPage.CLOSE;
                     end;
                 }
@@ -227,10 +227,10 @@ page 51533397 "Evaluation Committe Activities"
 
                     trigger OnAction()
                     begin
-                         HRCompanyActivities.Reset;
-                         HRCompanyActivities.SetRange(HRCompanyActivities.Code,Rec.Code);
-                         if HRCompanyActivities.Find('-') then
-                         REPORT.Run(39006017,true,false,HRCompanyActivities);
+                        HRCompanyActivities.Reset;
+                        HRCompanyActivities.SetRange(HRCompanyActivities.Code, Rec.Code);
+                        if HRCompanyActivities.Find('-') then
+                            REPORT.Run(39006017, true, false, HRCompanyActivities);
                     end;
                 }
             }
@@ -246,7 +246,7 @@ page 51533397 "Evaluation Committe Activities"
                     PromotedCategory = Category4;
                     PromotedIsBig = true;
                     RunObject = Page "Approval Entries";
-                    RunPageLink = "Document No."=FIELD(Code);
+                    RunPageLink = "Document No." = FIELD(Code);
 
                     trigger OnAction()
                     var
@@ -271,14 +271,14 @@ page 51533397 "Evaluation Committe Activities"
                     trigger OnAction()
                     var
                         ApprovalMgt: Codeunit "Approvals Mgmt.";
-                        Commitments: Record Committments;
+                        //Commitments: Record Committments;
                         ApprovalsMgmt: Codeunit "Approvals Mgmt.";
                     begin
-                        Rec.TestField(Rec.Status,Rec.Status::New);
-                         VarVariant := Rec;
-                         if CustomApprovals.CheckApprovalsWorkflowEnabled(VarVariant) then
-                          CustomApprovals.OnSendDocForApproval(VarVariant);
-                        
+                        Rec.TestField(Rec.Status, Rec.Status::New);
+                        VarVariant := Rec;
+                        //if CustomApprovals.CheckApprovalsWorkflowEnabled(VarVariant) then
+                        //CustomApprovals.OnSendDocForApproval(VarVariant);
+
                     end;
                 }
                 action("Cancel Approval")
@@ -293,29 +293,28 @@ page 51533397 "Evaluation Committe Activities"
                     var
                         ApprovalMgt: Codeunit "Approvals Mgmt.";
                     begin
-                        Rec.TestField(Rec.Status,Rec.Status::Approved);
+                        Rec.TestField(Rec.Status, Rec.Status::Approved);
                         USetup.Get(UserId);
                         if USetup."Can Cancel Document" = true then begin
-                        Rec.Status:= Rec.Status::Canceled ;
-                        Rec.Modify;
-                        DTime:= Today;
-                        CI.Get;
-                        HRActivityApprovalEntry.Reset;
-                        HRActivityApprovalEntry.SetRange(HRActivityApprovalEntry."Document No.",Rec.Code);
-                        if HRActivityApprovalEntry.Find('-') then
-                        begin
-                        repeat
-                        
-                        /* SMTP.CreateMessage(CI.Name,CI."E-Mail",HRActivityApprovalEntry."Participant Email",
-                        'Evaluation Committee','Dear'+' '+HRActivityApprovalEntry."Partipant Name"
-                         + 'Please note that Document '+HRActivityApprovalEntry."Document No."+' has been cancelled '+ 'On ' + Format(DTime)  +'  '
-                           ,true); */
-                         SMTP.Send();
-                        //HRActivityApprovalEntry.Notified:=TRUE;
-                        //HRActivityApprovalEntry.MODIFY;
-                        until HRActivityApprovalEntry.Next=0;
-                        Message('[%1] Evaluation Committee Members Have Been Notified About This Activity', HRActivityApprovalEntry.Count);
-                        end;
+                            Rec.Status := Rec.Status::Canceled;
+                            Rec.Modify;
+                            DTime := Today;
+                            CI.Get;
+                            HRActivityApprovalEntry.Reset;
+                            HRActivityApprovalEntry.SetRange(HRActivityApprovalEntry."Document No.", Rec.Code);
+                            if HRActivityApprovalEntry.Find('-') then begin
+                                repeat
+
+                                    /* SMTP.CreateMessage(CI.Name,CI."E-Mail",HRActivityApprovalEntry."Participant Email",
+                                    'Evaluation Committee','Dear'+' '+HRActivityApprovalEntry."Partipant Name"
+                                     + 'Please note that Document '+HRActivityApprovalEntry."Document No."+' has been cancelled '+ 'On ' + Format(DTime)  +'  '
+                                       ,true); */
+                                    SMTP.Send();
+                                //HRActivityApprovalEntry.Notified:=TRUE;
+                                //HRActivityApprovalEntry.MODIFY;
+                                until HRActivityApprovalEntry.Next = 0;
+                                Message('[%1] Evaluation Committee Members Have Been Notified About This Activity', HRActivityApprovalEntry.Count);
+                            end;
                         end;
 
                     end;
@@ -333,16 +332,16 @@ page 51533397 "Evaluation Committe Activities"
                         Text001: Label 'You have Selected not to cancle this document';
                     begin
                         USetup.Get(UserId);
-                        if USetup."Can Cancel Document" = true then  begin
-                        Rec.TestField(Status,Rec.Status::Approved);
-                        if Confirm(Text000,true) then  begin
+                        if USetup."Can Cancel Document" = true then begin
+                            Rec.TestField(Status, Rec.Status::Approved);
+                            if Confirm(Text000, true) then begin
 
-                        Rec.Status:=Rec.Status::Canceled;
-                        Rec.Modify;
-                        end else
-                          Error(Text001);
+                                Rec.Status := Rec.Status::Canceled;
+                                Rec.Modify;
+                            end else
+                                Error(Text001);
                         end else begin
-                          Error('You do not have the rights to cancel the document');
+                            Error('You do not have the rights to cancel the document');
                         end;
                     end;
                 }
@@ -352,17 +351,17 @@ page 51533397 "Evaluation Committe Activities"
 
     trigger OnAfterGetRecord()
     begin
-              UpdateControls;
+        UpdateControls;
     end;
 
     trigger OnInit()
     begin
-              // UpdateControls;
+        // UpdateControls;
     end;
 
     trigger OnOpenPage()
     begin
-            UpdateControls;
+        UpdateControls;
     end;
 
     var
@@ -383,9 +382,9 @@ page 51533397 "Evaluation Committe Activities"
         VarVariant: Variant;
         ApprovalEntries: Page "Approval Entries";
         ApprovalComments: Page "Approval Comments";
-        InternalMemoLines: Record "Internal Memo Lines";
+        //InternalMemoLines: Record "Internal Memo Lines";
         ApprovalsMgmt: Codeunit "Approvals Mgmt.";
-        CustomApprovals: Codeunit "Custom Approval Management";
+        //CustomApprovals: Codeunit "Custom Approval Management";
         USetup: Record "User Setup";
         DTime: Date;
         CI: Record "Company Information";
@@ -393,9 +392,9 @@ page 51533397 "Evaluation Committe Activities"
     procedure UpdateControls()
     begin
         if Rec.Closed then begin
-        CurrPage.Editable:=false;
+            CurrPage.Editable := false;
         end else begin
-        CurrPage.Editable:=true;
+            CurrPage.Editable := true;
         end;
     end;
 
@@ -403,20 +402,19 @@ page 51533397 "Evaluation Committe Activities"
     begin
         //TESTFIELD(Status,Status::Approved);
         HRActivityApprovalEntry.Reset;
-        HRActivityApprovalEntry.SetRange(HRActivityApprovalEntry."Document No.",Rec.Code);
-        if HRActivityApprovalEntry.Find('-') then
-        begin
-        repeat
-        // IF Status <> Status::Approved THEN
-        // ERROR('You Cannot notify a participant when the application is not approved');
+        HRActivityApprovalEntry.SetRange(HRActivityApprovalEntry."Document No.", Rec.Code);
+        if HRActivityApprovalEntry.Find('-') then begin
+            repeat
+                // IF Status <> Status::Approved THEN
+                // ERROR('You Cannot notify a participant when the application is not approved');
 
-        /* SMTP.CreateMessage('Dear'+' '+HRActivityApprovalEntry."Partipant Name",HRActivityApprovalEntry."Participant Email",HRActivityApprovalEntry."Participant Email",
-           "RFQ Description","Email Message"+'. '+ 'On' + ' ' + Format(Date) +'  '+Format(Time)+'At'+Venue+'. '+HRActivityApprovalEntry."Email Message"+'. '+'Please plan to attend',true);
-         SMTP.Send(); */
-        HRActivityApprovalEntry.Notified:=true;
-        HRActivityApprovalEntry.Modify;
-        until HRActivityApprovalEntry.Next=0;
-        Message('[%1] Evaluation Committee Members Have Been Notified About This Activity', HRActivityApprovalEntry.Count);
+                /* SMTP.CreateMessage('Dear'+' '+HRActivityApprovalEntry."Partipant Name",HRActivityApprovalEntry."Participant Email",HRActivityApprovalEntry."Participant Email",
+                   "RFQ Description","Email Message"+'. '+ 'On' + ' ' + Format(Date) +'  '+Format(Time)+'At'+Venue+'. '+HRActivityApprovalEntry."Email Message"+'. '+'Please plan to attend',true);
+                 SMTP.Send(); */
+                HRActivityApprovalEntry.Notified := true;
+                HRActivityApprovalEntry.Modify;
+            until HRActivityApprovalEntry.Next = 0;
+            Message('[%1] Evaluation Committee Members Have Been Notified About This Activity', HRActivityApprovalEntry.Count);
 
 
 

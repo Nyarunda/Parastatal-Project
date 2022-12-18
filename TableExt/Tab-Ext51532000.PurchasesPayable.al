@@ -50,5 +50,17 @@ tableextension 51532000 "Purchases & Payable Setup Ext" extends "Purchases & Pay
             DataClassification = ToBeClassified;
             TableRelation = "No. Series";
         }
+        field(7012; "Inspection Commitee"; Code[20])
+        {
+            Caption = 'Inspection Commitee';
+            DataClassification = ToBeClassified;
+            TableRelation = "No. Series";
+        }
+        field(7013; "Tender Commitee"; Code[20])
+        {
+            Caption = 'Tender Commitee';
+            DataClassification = ToBeClassified;
+            TableRelation = "No. Series";
+        }
     }
 }

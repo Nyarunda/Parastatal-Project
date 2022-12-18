@@ -84,18 +84,20 @@ page 51533921 "Tender Activity Participants"
             InsComm.Modify;
         end;
 
-        DispComm.Reset;
-        DispComm.SetRange(DispComm.Code, Rec."Document No.");
-        if DispComm.Find('-') then begin
-            Rec."Email Message" := DispComm."Email Message";
-            DispComm.Modify;
-        end;
+        /**
+                DispComm.Reset;
+                DispComm.SetRange(DispComm.Code, Rec."Document No.");
+                if DispComm.Find('-') then begin
+                    Rec."Email Message" := DispComm."Email Message";
+                    DispComm.Modify;
+                end;
+                **/
     end;
 
     var
         TendComm: Record "Tender Committee Activities";
         EvalComm: Record "Evaluation Committee Activity";
         InsComm: Record "Inspection Committee Activity";
-        DispComm: Record "Disposal Committee Activity";
+    //DispComm: Record "Disposal Committee Activity";
 }
 

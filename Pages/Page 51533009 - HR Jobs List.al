@@ -17,27 +17,21 @@ page 51533009 "HR Jobs List"
             repeater(Control1102755000)
             {
                 ShowCaption = false;
-                field("Job ID";"Job ID")
-                {
-                    Importance = Promoted;
-                    Style = Strong;
-                    StyleExpr = TRUE;
-                }
-                field("Job Description";"Job Description")
+                field("Job Description"; Rec."Job Description")
                 {
                     Caption = 'Job Title';
                 }
-                field("No of Posts";"No of Posts")
+                field("No of Posts"; Rec."No of Posts")
                 {
                 }
-                field("Responsibility Center";"Responsibility Center")
+                field("Responsibility Center"; Rec."Responsibility Center")
                 {
                 }
-                field("Date Created";"Date Created")
+                field("Date Created"; Rec."Date Created")
                 {
                     StyleExpr = TRUE;
                 }
-                field(Status;Status)
+                field(Status; Rec.Status)
                 {
                     Style = Attention;
                     StyleExpr = TRUE;
@@ -46,11 +40,11 @@ page 51533009 "HR Jobs List"
         }
         area(factboxes)
         {
-            part("<Page39003906>";"HR Jobs Factbox")
+            part("<Page39003906>"; "HR Jobs Factbox")
             {
-                SubPageLink = "Job ID"=FIELD("Job ID");
+                SubPageLink = "Job ID" = FIELD("Job ID");
             }
-            systempart(Control1102755004;Outlook)
+            systempart(Control1102755004; Outlook)
             {
             }
         }

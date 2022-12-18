@@ -13,5 +13,10 @@ tableextension 51532003 "User Setup Ext" extends "User Setup"
             Caption = 'Allow Send Email Proc Officer';
             DataClassification = ToBeClassified;
         }
+        field(6002; "Can Cancel Document"; Boolean)
+        {
+            Caption = 'Can Cancel Document';
+            DataClassification = ToBeClassified;
+        }
     }
 }

@@ -80,8 +80,7 @@ page 51533396 "Inspection Committee Activitie"
             }
             part(Control1102755011; "Tender Activity Participants")
             {
-                SubPageLink = "Document No." = FIELD(Code),
-                              "RFQ No" = FIELD("RFQ No.");
+                SubPageLink = "Table ID" = const(51533448), "Document No." = FIELD(Code), "RFQ No" = FIELD("RFQ No.");
             }
         }
         area(factboxes)
@@ -116,20 +115,20 @@ page 51533396 "Inspection Committee Activitie"
                             HRActivityApprovalEntry.DeleteAll;
 
                         //GET ONLY ACTIVE EMPLOYEES
-                        InternalMemoLines.Reset;
-                        InternalMemoLines.SetRange(InternalMemoLines."Document No.", Rec."Memo No.");
-                        InternalMemoLines.FindFirst;
-                        begin
-                            HRActivityApprovalEntry.Reset;
-                            repeat
-                                HRActivityApprovalEntry.Init;
-                                HRActivityApprovalEntry.Participant := InternalMemoLines."Employee No.";
-                                HRActivityApprovalEntry."Document No." := Rec.Code;
-                                HRActivityApprovalEntry.Validate(HRActivityApprovalEntry.Participant);
-                                HRActivityApprovalEntry.Insert;
-                            until InternalMemoLines.Next = 0;
-                            Message('Completed Successfully');
-                        end;
+                        //InternalMemoLines.Reset;
+                        //InternalMemoLines.SetRange(InternalMemoLines."Document No.", Rec."Memo No.");
+                        //InternalMemoLines.FindFirst;
+                        //begin
+                        HRActivityApprovalEntry.Reset;
+                        //repeat
+                        HRActivityApprovalEntry.Init;
+                        //  HRActivityApprovalEntry.Participant := InternalMemoLines."Employee No.";
+                        HRActivityApprovalEntry."Document No." := Rec.Code;
+                        HRActivityApprovalEntry.Validate(HRActivityApprovalEntry.Participant);
+                        HRActivityApprovalEntry.Insert;
+                        //until InternalMemoLines.Next = 0;
+                        Message('Completed Successfully');
+                        //end;
                     end;
                 }
                 action("Notify Participants ")
@@ -224,7 +223,6 @@ page 51533396 "Inspection Committee Activitie"
                             //if Exists(Filename) then
                             //Erase(Filename);
 
-                            //MESSAGE('Passed through');
 
                             until HRActivityApprovalEntry.Next = 0
                         end;
@@ -319,13 +317,13 @@ page 51533396 "Inspection Committee Activitie"
                     trigger OnAction()
                     var
                         ApprovalMgt: Codeunit "Approvals Mgmt.";
-                        Commitments: Record Committments;
+                        //Commitments: Record Committments;
                         ApprovalsMgmt: Codeunit "Approvals Mgmt.";
                     begin
                         Rec.TestField(Status, Rec.Status::New);
                         VarVariant := Rec;
-                        if CustomApprovals.CheckApprovalsWorkflowEnabled(VarVariant) then
-                            CustomApprovals.OnSendDocForApproval(VarVariant);
+                        //if CustomApprovals.CheckApprovalsWorkflowEnabled(VarVariant) then
+                        //    CustomApprovals.OnSendDocForApproval(VarVariant);
                         //
 
                         // IF ApprovalsMgmt.CheckProfOpApprovalPossible(Rec) THEN
@@ -346,7 +344,7 @@ page 51533396 "Inspection Committee Activitie"
                     begin
                         Rec.TestField(Status, Rec.Status::"Pending Approval");
                         VarVariant := Rec;
-                        CustomApprovals.OnCancelDocApprovalRequest(VarVariant);
+                        //CustomApprovals.OnCancelDocApprovalRequest(VarVariant);
                         //ApprovalMgt.OnCancelProfOpApprovalRequest(Rec);
                         Rec.TestField(Status, Rec.Status::Approved);
                         USetup.Get(UserId);
@@ -437,9 +435,9 @@ page 51533396 "Inspection Committee Activitie"
         VarVariant: Variant;
         ApprovalEntries: Page "Approval Entries";
         ApprovalComments: Page "Approval Comments";
-        InternalMemoLines: Record "Internal Memo Lines";
+        //InternalMemoLines: Record "Internal Memo Lines";
         ApprovalsMgmt: Codeunit "Approvals Mgmt.";
-        CustomApprovals: Codeunit "Custom Approval Management";
+        //CustomApprovals: Codeunit "Custom Approval Management";
         DTime: Date;
         CI: Record "Company Information";
         USetup: Record "User Setup";

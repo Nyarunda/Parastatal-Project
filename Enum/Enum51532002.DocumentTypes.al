@@ -1,7 +1,7 @@
 enum 51532002 "Document Types"
 {
     Extensible = true;
-    
+
     value(0; " ")
     {
         Caption = ' ';
@@ -14,19 +14,27 @@ enum 51532002 "Document Types"
     {
         Caption = 'Invoice';
     }
-    value(3; "Credit Memo")
+    value(3; Quote)
+    {
+        Caption = 'Quote';
+    }
+    value(4; Order)
+    {
+        Caption = 'Order';
+    }
+    value(5; "Credit Memo")
     {
         Caption = 'Credit Memo';
     }
-    value(4; "Finance Charge Memo")
+    value(6; "Finance Charge Memo")
     {
         Caption = 'Finance Charge Memo';
     }
-    value(5; Reminder)
+    value(7; Reminder)
     {
         Caption = 'Reminder';
     }
-    value(6; Refund)
+    value(8; Refund)
     {
         Caption = 'Refund';
     }
