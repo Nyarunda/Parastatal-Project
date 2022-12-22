@@ -18,5 +18,10 @@ tableextension 51532003 "User Setup Ext" extends "User Setup"
             Caption = 'Can Cancel Document';
             DataClassification = ToBeClassified;
         }
+        field(6003; "Edit Work Plan Activites"; Boolean)
+        {
+            Caption = 'Edit Work Plan Activites';
+            DataClassification = ToBeClassified;
+        }
     }
 }

@@ -5,7 +5,7 @@ page 51533470 "Workplan List"
     PageType = List;
     PromotedActionCategories = 'New,Process,Reports,Functions';
     SourceTable = Workplan;
-    SourceTableView = WHERE("Last Year"=FILTER(false));
+    SourceTableView = WHERE("Last Year" = FILTER(false));
 
     layout
     {
@@ -14,30 +14,30 @@ page 51533470 "Workplan List"
             repeater(Control1102756000)
             {
                 ShowCaption = false;
-                field("Workplan Code";"Workplan Code")
+                field("Workplan Code"; Rec."Workplan Code")
                 {
                 }
-                field("Workplan Description";"Workplan Description")
+                field("Workplan Description"; Rec."Workplan Description")
                 {
                     Caption = 'Workplan Description';
                 }
-                field("Global Dimension 1 Code";"Global Dimension 1 Code")
+                field("Global Dimension 1 Code"; Rec."Global Dimension 1 Code")
                 {
                 }
-                field("Global Dimension 2 Code";"Global Dimension 2 Code")
+                field("Global Dimension 2 Code"; Rec."Global Dimension 2 Code")
                 {
                 }
-                field(Blocked;Blocked)
+                field(Blocked; Rec.Blocked)
                 {
                 }
             }
         }
         area(factboxes)
         {
-            systempart(Control1000000002;Outlook)
+            systempart(Control1000000002; Outlook)
             {
             }
-            systempart(Control1000000000;Notes)
+            systempart(Control1000000000; Notes)
             {
             }
         }
@@ -58,7 +58,7 @@ page 51533470 "Workplan List"
                     Promoted = true;
                     PromotedCategory = Category4;
                     RunObject = Page WorkplanActivities;
-                    RunPageLink = "Workplan Code"=FIELD("Workplan Code");
+                    RunPageLink = "Workplan Code" = FIELD("Workplan Code");
                     RunPageMode = Edit;
                 }
                 action(Print)
@@ -70,10 +70,10 @@ page 51533470 "Workplan List"
                     trigger OnAction()
                     begin
 
-                        Reset;
-                        SetFilter("Workplan Code","Workplan Code");
-                        REPORT.Run(REPORT::"W/P Report",true,true,Rec);
-                        Reset;
+                        Rec.Reset;
+                        Rec.SetFilter("Workplan Code", Rec."Workplan Code");
+                        //REPORT.Run(REPORT::"W/P Report",true,true,Rec);
+                        Rec.Reset;
                     end;
                 }
             }

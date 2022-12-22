@@ -1,55 +1,132 @@
-page 51533448 "Imprest Surrender List"
+page 51533449 "Imprest Surrender"
 {
-    CardPageID = "Imprest Surrender";
-    DeleteAllowed = false;
-    InsertAllowed = false;
-    PageType = List;
+    Caption = 'Travel Imprest surrender';
+    PageType = Document;
     PromotedActionCategories = 'New,Process,Reports,Approvals,Cancellation,Category6_caption,Category7_caption,Category8_caption,Approval_Details,Category10_caption';
     SourceTable = "Imprest Surrender Header";
-    SourceTableView = WHERE(Status = FILTER(Pending | "Pending Approval"));
 
     layout
     {
         area(content)
         {
-            repeater(Group)
+            group(General)
             {
+                Caption = 'General';
                 field(No; Rec.No)
                 {
                 }
                 field("Surrender Date"; Rec."Surrender Date")
                 {
+                    Editable = true;
+
+                    trigger OnValidate()
+                    begin
+                        CurrPage.Update;
+                    end;
                 }
                 field("Account No."; Rec."Account No.")
                 {
+
+                    trigger OnValidate()
+                    begin
+                        AccountName := GetCustName(Rec."Account No.");
+                    end;
                 }
                 field("Account Name"; Rec."Account Name")
+                {
+                    Editable = true;
+                    Enabled = false;
+                }
+                field("Responsibility Center"; Rec."Responsibility Center")
                 {
                 }
                 field("Imprest Issue Doc. No"; Rec."Imprest Issue Doc. No")
                 {
                 }
-                field("Imprest Issue Date"; Rec."Imprest Issue Date")
-                {
-                }
                 field(Amount; Rec.Amount)
                 {
+                    Enabled = false;
+                }
+                field("Imprest Issue Date"; Rec."Imprest Issue Date")
+                {
+                    Enabled = false;
+                }
+                field("Global Dimension 1 Code"; Rec."Global Dimension 1 Code")
+                {
+                    Caption = 'Department Code';
+                    Enabled = false;
+
+                    trigger OnValidate()
+                    begin
+                        DimName1 := GetDimensionName(Rec."Global Dimension 1 Code", 1);
+                    end;
+                }
+                field("Function Name"; Rec."Function Name")
+                {
+                    Caption = 'Department Name';
+                }
+                field("Shortcut Dimension 2 Code"; Rec."Shortcut Dimension 2 Code")
+                {
+                    Caption = 'Division Code';
+                    Enabled = false;
+
+                    trigger OnValidate()
+                    begin
+                        DimName2 := GetDimensionName(Rec."Shortcut Dimension 2 Code", 2);
+                    end;
+                }
+                field("Budget Center Name"; Rec."Budget Center Name")
+                {
+                    Caption = 'Division Name';
+                }
+                field("Shortcut Dimension 3 Code"; Rec."Shortcut Dimension 3 Code")
+                {
+                }
+                //field("Extrenal Document No.";Rec."Extrenal Document No.") { ShowCaption = false;  }
+                field(Posted; Rec.Posted)
+                {
+                    Editable = false;
+                }
+                field("Date Posted"; Rec."Date Posted")
+                {
+                    Editable = true;
                 }
                 field(Status; Rec.Status)
                 {
                 }
                 field(Cashier; Rec.Cashier)
                 {
+                    Enabled = false;
+                }
+                field("User ID"; Rec."User ID")
+                {
+                    Enabled = false;
+                    Visible = false;
+                }
+                field("Currency Code"; Rec."Currency Code")
+                {
+                    Enabled = false;
+                }
+                field(RecID; Format(Rec.RecordId))
+                {
+                    Visible = false;
                 }
             }
-        }
-        area(factboxes)
-        {
-            systempart(Control1102755010; Notes)
+            field(Control1102755001; '')
             {
+                //CaptionClass = Text19053222;
+                ShowCaption = false;
+                Style = Standard;
+                StyleExpr = TRUE;
             }
-            systempart(Control1102755011; MyNotes)
+            //part(ImprestLines; "Imprest Surrender Details") { Editable = ImprestLinesEditable; SubPageLink = "Surrender Doc No."=FIELD(No);          }
+            systempart(Control1; Notes)
             {
+                Visible = true;
+            }
+            systempart(Control2; Links)
+            {
+                Visible = true;
             }
         }
     }
@@ -58,10 +135,10 @@ page 51533448 "Imprest Surrender List"
     {
         area(processing)
         {
-            group("<Action1102756004>")
+            group(Functions)
             {
                 Caption = 'Functions';
-                action("<Action1000000001>")
+                action("Cancel Document")
                 {
                     Caption = 'Cancel Document';
                     Image = Reject;
@@ -75,14 +152,14 @@ page 51533448 "Imprest Surrender List"
                         Rec.TestField(Status, Rec.Status::Approved);
                         if Confirm(Text002, true) then begin
                             Doc_Type := Doc_Type::Imprest;
-                            BudgetControl.ReverseEntries(Doc_Type, Rec."Imprest Issue Doc. No");
+                            //BudgetControl.ReverseEntries(Doc_Type, "Imprest Issue Doc. No");
                             Rec.Status := Rec.Status::Cancelled;
                             Rec.Modify;
                         end;
                     end;
                 }
             }
-            action("<Action1102758002>")
+            action(Post)
             {
                 Caption = 'Post';
                 Image = Post;
@@ -95,17 +172,27 @@ page 51533448 "Imprest Surrender List"
                 var
                     Txt0001: Label 'Actual Spent and the Cash Receipt Amount should be equal to the amount Issued';
                 begin
-
-
-
                     Rec.TestField(Status, Rec.Status::Approved);
 
-                    if Rec.Posted then
-                        //ERROR('The transaction has already been posted.');
+                    ImprestDetails.Reset;
+                    ImprestDetails.SetRange(ImprestDetails."Surrender Doc No.", Rec.No);
+                    if ImprestDetails.FindSet then
+                        repeat
+                            if (ImprestDetails."Cash Receipt Amount" + ImprestDetails."Actual Spent") <> ImprestDetails.Amount then
+                                Error(Txt0001);
+                        /*IF (ImprestDetails."Cash Receipt Amount"<>ImprestDetails.Amount) THEN BEGIN
+                           IF (ImprestDetails."Actual Spent"<>ImprestDetails.Amount) THEN
+                            ERROR(Txt0001);
+                           END;*/
 
-                        //HOW ABOUT WHERE ONE RETURNS ALL THE AMOUNT??
-                        //THERE SHOULD BE NO GENJNL ENTRIES BUT REVERSE THE COMMITTMENTS
-                        Rec.CalcFields("Actual Spent");
+                        until ImprestDetails.Next = 0;
+
+                    if Rec.Posted then
+                        Error('The transaction has already been posted.');
+
+                    //HOW ABOUT WHERE ONE RETURNS ALL THE AMOUNT??
+                    //THERE SHOULD BE NO GENJNL ENTRIES BUT REVERSE THE COMMITTMENTS
+                    Rec.CalcFields("Actual Spent");
                     if Rec."Actual Spent" = 0 then
                         if Confirm(Text000, true) then
                             UpdateforNoActualSpent
@@ -141,8 +228,8 @@ page 51533448 "Imprest Surrender List"
 
                             //ImprestDetails.TESTFIELD("Actual Spent");
                             //ImprestDetails.TESTFIELD("Actual Spent");
-                            if (ImprestDetails."Cash Receipt Amount" + ImprestDetails."Actual Spent") <> ImprestDetails.Amount then
-                                Error(Txt0001);
+                            /*IF (ImprestDetails."Cash Receipt Amount"+ImprestDetails."Actual Spent")<>ImprestDetails.Amount THEN
+                               ERROR(Txt0001);*///sheshi
 
                             Rec.TestField("Global Dimension 1 Code");
 
@@ -156,7 +243,9 @@ page 51533448 "Imprest Surrender List"
                             GenJnlLine."Account No." := ImprestDetails."Account No:";
                             GenJnlLine.Validate(GenJnlLine."Account No.");
                             //Set these fields to blanks
-                            GenJnlLine."Posting Date" := Rec."Surrender Date";
+                            //GenJnlLine."Posting Date":="Surrender Date";
+                            GenJnlLine."Posting Date" := Rec."Date Posted";
+                            GenJnlLine."Document Date" := Rec."Surrender Date";
                             GenJnlLine."Gen. Posting Type" := GenJnlLine."Gen. Posting Type"::" ";
                             GenJnlLine.Validate("Gen. Posting Type");
                             GenJnlLine."Gen. Bus. Posting Group" := '';
@@ -172,7 +261,7 @@ page 51533448 "Imprest Surrender List"
                             GenJnlLine.Validate(GenJnlLine.Amount);
                             GenJnlLine."Bal. Account Type" := GenJnlLine."Bal. Account Type"::Customer;
                             GenJnlLine."Bal. Account No." := ImprestDetails."Imprest Holder";
-                            GenJnlLine.Description := 'Imprest Surrendered by staff';
+                            GenJnlLine.Description := 'Surrendered by:' + Rec."Account No." + ':' + Rec.Payee + ':' + Rec.No;
                             GenJnlLine.Validate(GenJnlLine."Bal. Account No.");
                             GenJnlLine."Currency Code" := Rec."Currency Code";
                             GenJnlLine.Validate("Currency Code");
@@ -184,13 +273,15 @@ page 51533448 "Imprest Surrender List"
                             GenJnlLine.Validate(GenJnlLine."Shortcut Dimension 1 Code");
                             GenJnlLine."Shortcut Dimension 2 Code" := Rec."Shortcut Dimension 2 Code";
                             GenJnlLine.Validate(GenJnlLine."Shortcut Dimension 2 Code");
-                            GenJnlLine.ValidateShortcutDimCode(3, Rec."Shortcut Dimension 3 Code");
+                            GenJnlLine."Shortcut Dimension 3 Code" := Rec."Shortcut Dimension 3 Code";
+                            GenJnlLine.Validate(GenJnlLine."Shortcut Dimension 3 Code");
+                            //GenJnlLine.ValidateShortcutDimCode(3,"Shortcut Dimension 3 Code");
                             GenJnlLine.ValidateShortcutDimCode(4, Rec."Shortcut Dimension 4 Code");
 
                             //Application of Surrender entries
                             if GenJnlLine."Bal. Account Type" = GenJnlLine."Bal. Account Type"::Customer then begin
                                 GenJnlLine."Applies-to Doc. Type" := GenJnlLine."Applies-to Doc. Type"::Invoice;
-                                GenJnlLine."Applies-to Doc. No." := Rec."Imprest Issue Doc. No";
+                                //GenJnlLine."Applies-to Doc. No." := "Imprest Issue Doc. No";
                                 GenJnlLine.Validate(GenJnlLine."Applies-to Doc. No.");
                                 GenJnlLine."Applies-to ID" := Rec."Apply to ID";
                             end;
@@ -221,7 +312,9 @@ page 51533448 "Imprest Surrender List"
                                 GenJnlLine.Validate("VAT Bus. Posting Group");
                                 GenJnlLine."VAT Prod. Posting Group" := '';
                                 GenJnlLine.Validate("VAT Prod. Posting Group");
-                                GenJnlLine."Posting Date" := Rec."Surrender Date";
+                                //GenJnlLine."Posting Date":="Surrender Date";
+                                GenJnlLine."Posting Date" := Rec."Date Posted";
+                                GenJnlLine."Document Date" := Rec."Surrender Date";
                                 GenJnlLine."Document No." := Rec.No;
                                 GenJnlLine.Amount := -ImprestDetails."Cash Surrender Amt";
                                 GenJnlLine.Validate(GenJnlLine.Amount);
@@ -233,14 +326,16 @@ page 51533448 "Imprest Surrender List"
 
                                 GenJnlLine."Bal. Account Type" := GenJnlLine."Bal. Account Type"::"Bank Account";
                                 GenJnlLine."Bal. Account No." := ImprestDetails."Bank/Petty Cash";
-                                GenJnlLine.Description := 'Imprest Surrender by staff';
+                                GenJnlLine.Description := 'Imprest Surrender by staff' + ':' + Rec."Account Name" + ':' + Rec.No;
                                 GenJnlLine.Validate(GenJnlLine."Bal. Account No.");
-                                GenJnlLine."Shortcut Dimension 1 Code" := Rec."Global Dimension 1 Code";
+                                GenJnlLine."Shortcut Dimension 1 Code" := ImprestDetails."Shortcut Dimension 1 Code";
                                 GenJnlLine.Validate(GenJnlLine."Shortcut Dimension 1 Code");
-                                GenJnlLine."Shortcut Dimension 2 Code" := Rec."Shortcut Dimension 2 Code";
+                                GenJnlLine."Shortcut Dimension 2 Code" := ImprestDetails."Shortcut Dimension 2 Code";
                                 GenJnlLine.Validate(GenJnlLine."Shortcut Dimension 2 Code");
-                                GenJnlLine.ValidateShortcutDimCode(3, Rec."Shortcut Dimension 3 Code");
-                                GenJnlLine.ValidateShortcutDimCode(4, Rec."Shortcut Dimension 4 Code");
+                                GenJnlLine."Shortcut Dimension 3 Code" := ImprestDetails."Shortcut Dimension 3 Code";
+                                GenJnlLine.Validate(GenJnlLine."Shortcut Dimension 3 Code");
+                                GenJnlLine."Dimension Set ID" := ImprestDetails."Dimension Set ID";
+                                //GenJnlLine.ValidateShortcutDimCode(4,"Shortcut Dimension 4 Code");
                                 GenJnlLine."Applies-to ID" := ImprestDetails."Imprest Holder";
                                 if GenJnlLine.Amount <> 0 then
                                     GenJnlLine.Insert;
@@ -258,32 +353,33 @@ page 51533448 "Imprest Surrender List"
                         AdjustGenJnl.Run(GenJnlLine);
                         //End Adjust Gen Jnl Exchange Rate Rounding Balances
 
-                        CODEUNIT.Run(CODEUNIT::"Gen. Jnl.-Post Line", GenJnlLine);
+                        CODEUNIT.Run(CODEUNIT::"Gen. Jnl.-Post", GenJnlLine);
                     end;
 
                     if JournalPostSuccessful.PostedSuccessfully then begin
-                        Rec.Posted := true;
-                        Rec.Status := Rec.Status::Posted;
-                        Rec."Date Posted" := Today;
-                        Rec."Time Posted" := Time;
-                        Rec."Posted By" := UserId;
-                        Rec.Modify;
-                        //Tag the Source Imprest Requisition as Surrendered
-                        ImprestReq.Reset;
-                        ImprestReq.SetRange(ImprestReq."No.", Rec."Imprest Issue Doc. No");
-                        if ImprestReq.Find('-') then begin
-                            ImprestReq."Surrender Status" := ImprestReq."Surrender Status"::Full;
-                            ImprestReq.Modify;
-                        end;
-
-                        //End Tag
-                        //Post Committment Reversals
-                        Doc_Type := Doc_Type::Imprest;
-                        BudgetControl.ReverseEntries(Doc_Type, Rec."Imprest Issue Doc. No");
                     end;
+                    Rec.Posted := true;
+                    Rec.Status := Rec.Status::Posted;
+                    Rec."Date Posted" := Today;
+                    Rec."Time Posted" := Time;
+                    Rec."Posted By" := UserId;
+                    Rec.Modify;
+                    //Tag the Source Imprest Requisition as Surrendered
+                    ImprestReq.Reset;
+                    ImprestReq.SetRange(ImprestReq."No.", Rec."Imprest Issue Doc. No");
+                    if ImprestReq.Find('-') then begin
+                        ImprestReq."Surrender Status" := ImprestReq."Surrender Status"::Full;
+                        ImprestReq.Modify;
+                    end;
+
+                    //End Tag
+                    //Post Committment Reversals
+                    Doc_Type := Doc_Type::Imprest;
+                    BudgetControl.ReverseEntries(Doc_Type, Rec."Imprest Issue Doc. No");
+
                 end;
             }
-            action("<Action1102758001>")
+            action(Print)
             {
                 Caption = 'Print';
                 Image = Print;
@@ -295,12 +391,11 @@ page 51533448 "Imprest Surrender List"
                 begin
                     Rec.Reset;
                     Rec.SetFilter(No, Rec.No);
-                    //50025
                     REPORT.Run(51533320, true, true, Rec);
                     Rec.Reset;
                 end;
             }
-            action("<Action1102760000>")
+            action("Get Imprest Document")
             {
                 Caption = 'Get Imprest Document';
                 Image = GetEntries;
@@ -332,16 +427,43 @@ page 51533448 "Imprest Surrender List"
                     trigger OnAction()
                     var
                         ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+                        Txt0001: Label 'Actual spent should be equal with the Amount';
                     begin
+                        Rec."Surrender Date" := Today;
+                        if not (Rec.Status = Rec.Status::Pending) then begin
+                            Error('Document must be Pending/Open');
+                        end;
+
+                        if not LinesExists then
+                            Error('There are no Lines created for this Document');
+
+                        if not AllFieldsEntered then
+                            Error('Some of the Key Fields on the Lines:[ACCOUNT NO.,AMOUNT] Have not been Entered please RECHECK your entries');
+
+                        /*
+                        //Ensure No Items That should be committed that are not
+                        IF LinesCommitmentStatus THEN
+                          ERROR('There are some lines that have not been committed');
+                        */
+                        //First Check whether all amount entered tally
+                        ImprestDetails.Reset;
+                        ImprestDetails.SetRange(ImprestDetails."Surrender Doc No.", Rec.No);
+                        //ImprestDetails.CALCFIELDS(ImprestDetails.Amount);
+                        if ImprestDetails.FindSet then
+                            repeat
+                                if (ImprestDetails."Cash Receipt Amount" + ImprestDetails."Actual Spent") <> ImprestDetails.Amount then
+                                    Error(Txt0001);
+                            until ImprestDetails.Next = 0;
+
                         VarVariant := Rec;
                         //if CustomApprovals.CheckApprovalsWorkflowEnabled(VarVariant) then
                         //    CustomApprovals.OnSendDocForApproval(VarVariant);
+
                     end;
                 }
                 action(CancelApprovalRequest)
                 {
                     Caption = 'Cancel Approval Re&quest';
-                    Enabled = OpenApprovalEntriesExist;
                     Image = Cancel;
                     Promoted = true;
                     PromotedCategory = Category9;
@@ -380,30 +502,150 @@ page 51533448 "Imprest Surrender List"
                     end;
                 }
             }
+            group(Approval)
+            {
+                Caption = 'Approval';
+                action(Approve)
+                {
+                    Caption = 'Approve';
+                    Image = Approve;
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedIsBig = true;
+                    Visible = OpenApprovalEntriesExistForCurrUser;
+
+                    trigger OnAction()
+                    var
+                        ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+                    begin
+                        ApprovalsMgmt.ApproveRecordApprovalRequest(Rec.RecordId)
+                    end;
+                }
+                action(Reject)
+                {
+                    Caption = 'Reject';
+                    Image = Reject;
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedIsBig = true;
+                    Visible = OpenApprovalEntriesExistForCurrUser;
+
+                    trigger OnAction()
+                    var
+                        ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+                    begin
+                        ApprovalsMgmt.RejectRecordApprovalRequest(Rec.RecordId)
+                    end;
+                }
+                action(Delegate)
+                {
+                    Caption = 'Delegate';
+                    Image = Delegate;
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    Visible = OpenApprovalEntriesExistForCurrUser;
+
+                    trigger OnAction()
+                    var
+                        ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+                    begin
+                        ApprovalsMgmt.DelegateRecordApprovalRequest(Rec.RecordId)
+                    end;
+                }
+                action(Comment)
+                {
+                    Caption = 'Comments';
+                    Image = ViewComments;
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedIsBig = true;
+                    RunObject = Page "Approval Comments";
+                    RunPageLink = "Table ID" = CONST(39005495),
+                                  "Document No." = FIELD(No);
+                    Visible = OpenApprovalEntriesExistForCurrUser;
+                }
+                action("Co&mments")
+                {
+                    Caption = 'Co&mments';
+                    Image = ViewComments;
+                    RunObject = Page "Approval Comments";
+                    RunPageLink = "Document No." = FIELD(No);
+                }
+            }
         }
     }
 
+    trigger OnAfterGetRecord()
+    begin
+        //OnAfterGetCurrRecord;
+        CurrPageUpdate;
+        SetControlAppearance;
+    end;
+
+    trigger OnInit()
+    begin
+        ImprestLinesEditable := true;
+        "Responsibility CenterEditable" := true;
+        "Imprest Issue Doc. NoEditable" := true;
+        "Account No.Editable" := true;
+        "Surrender DateEditable" := true;
+    end;
+
     trigger OnInsertRecord(BelowxRec: Boolean): Boolean
     begin
-        //check if the documenent has been added while another one is still pending
-        ImprestHdr.Reset;
-        //TravAccHeader.SETRANGE(SaleHeader."Document Type",SaleHeader."Document Type"::"Cash Sale");
-        ImprestHdr.SetRange(ImprestHdr.Cashier, UserId);
-        ImprestHdr.SetRange(ImprestHdr.Status, Rec.Status::Pending);
 
-        if ImprestHdr.Count > 0 then begin
-            Error('There are still some pending document(s) on your account. Please list & select the pending document to use.  ');
+        //check if the documenent has been added while another one is still pending
+        TravAccHeader.Reset;
+        TravAccHeader.SetRange(TravAccHeader.Cashier, UserId);
+        TravAccHeader.SetRange(TravAccHeader.Status, Rec.Status::Pending);
+
+        if TravAccHeader.Count > 0 then begin
+            //ERROR('There are still some pending document(s) on your account. Please list & select the pending document to use.  ');
         end;
+
+        TravAccHeader.Reset;
+        TravAccHeader.SetRange(TravAccHeader.Cashier, UserId);
+        TravAccHeader.SetRange(TravAccHeader.Status, Rec.Status::"Pending Approval");
+
+        if TravAccHeader.Count > 0 then begin
+            //ERROR('There are still some document(s) pending approval on your account.');
+        end;
+        TravAccHeader.Reset;
+        TravAccHeader.SetRange(TravAccHeader.Cashier, UserId);
+        TravAccHeader.SetRange(TravAccHeader.Status, Rec.Status::Approved);
+
+        if TravAccHeader.Count > 0 then begin
+            //ERROR('There are still somedocument(s)  pending  posting on your account.');
+        end;
+        //*********************************END ****************************************//
+
+        Rec."User ID" := UserId;
+        //CurrPage.UPDATE;
+    end;
+
+    trigger OnNewRecord(BelowxRec: Boolean)
+    begin
+        Rec."Responsibility Center" := UserMgt.GetPurchasesFilter();
+        //OnAfterGetCurrRecord;
+    end;
+
+    trigger OnNextRecord(Steps: Integer): Integer
+    begin
+        UpdateControls;
     end;
 
     trigger OnOpenPage()
     begin
+        //SETFILTER(Status,'<>Cancelled');
+
         if UserMgt.GetPurchasesFilter() <> '' then begin
             Rec.FilterGroup(2);
             Rec.SetRange("Responsibility Center", UserMgt.GetPurchasesFilter());
             Rec.FilterGroup(0);
         end;
-        Rec.SetFilter(Cashier, UserId);
+        Rec.Validate("Account No.");
+        AccountName := GetCustName(Rec."Account No.");
+        SetDocNoVisible;
     end;
 
     var
@@ -433,11 +675,14 @@ page 51533448 "Imprest Surrender List"
         Doc_Type: Option LPO,Requisition,Imprest,"Payment Voucher";
         ImprestReq: Record "Imprest Header";
         UserMgt: Codeunit "User Setup Management";
-        DocumentType: Option Quote,"Order",Invoice,"Credit Memo","Blanket Order","Return Order","None","Payment Voucher","Petty Cash",Imprest,Requisition,ImprestSurrender;
+        DocumentType: Option Quote,"Order",Invoice,"Credit Memo","Blanket Order","Return Order","None",JV,"Member Closure","Account Opening",Batches,Loan,Checkoff,"FOSA Account Opening",StandingOrder,HRJob,HRLeave,"HRTransport Request",HRTraining,"HREmp Requsition",MicroTrans,"Account Reactivation","Overdraft ",BLA,"Member Editable","MSacco Applications","MSacco PinChange","MSacco PhoneChange","MSacco TransChange",BulkSMS,"Payment Voucher","Petty Cash",Imp,Requisition,ImpSurr,Interbank,Receipt,"Staff Claim","Staff Adv",AdvSurr,OT;
         HasLines: Boolean;
         AllKeyFieldsEntered: Boolean;
         AccountName: Text[100];
+        Text000: Label 'You have not specified the Actual Amount Spent. This document will only reverse the committment and you will have to receipt the total amount returned.';
+        Text001: Label 'Document Not Posted';
         AdjustGenJnl: Codeunit "Adjust Gen. Journal Balance";
+        Text002: Label 'Are you sure you want to Cancel this Document?';
         [InDataSet]
         "Surrender DateEditable": Boolean;
         [InDataSet]
@@ -448,16 +693,15 @@ page 51533448 "Imprest Surrender List"
         "Responsibility CenterEditable": Boolean;
         [InDataSet]
         ImprestLinesEditable: Boolean;
-        Text000: Label 'You have not specified the Actual Amount Spent. This document will only reverse the committment and you will have to receipt the total amount returned.';
-        Text001: Label 'Document Not Posted';
-        Text002: Label 'Are you sure you want to Cancel this Document?';
         Text19053222: Label 'Enter Advance Accounting Details below';
+        TravAccHeader: Record "Imprest Surrender Header";
+        StatusEditable: Boolean;
+        DocNoVisible: Boolean;
         "NOT OpenApprovalEntriesExist": Boolean;
         OpenApprovalEntriesExistForCurrUser: Boolean;
         OpenApprovalEntriesExist: Boolean;
         VarVariant: Variant;
-        //CustomApprovals: Codeunit "Custom Approval Management";
-        ImprestHdr: Record "Imprest Surrender Header";
+    // CustomApprovals: Codeunit "Custom Approval Management";
 
     procedure GetDimensionName(var "Code": Code[20]; DimNo: Integer) Name: Text[60]
     var
@@ -517,7 +761,7 @@ page 51533448 "Imprest Surrender List"
     procedure UpdateforNoActualSpent()
     begin
         Rec.Posted := true;
-        Rec.Status :=Rec. Status::Posted;
+        Rec.Status := Rec.Status::Posted;
         Rec."Date Posted" := Today;
         Rec."Time Posted" := Time;
         Rec."Posted By" := UserId;
@@ -550,12 +794,87 @@ page 51533448 "Imprest Surrender List"
         AccountName := GetCustName(Rec."Account No.");
     end;
 
+    procedure UpdateControls()
+    begin
+        if Rec.Status = Rec.Status::Pending then
+            StatusEditable := true
+        else
+            StatusEditable := false;
+    end;
+
+    procedure CurrPageUpdate()
+    begin
+        xRec := Rec;
+        UpdateControls;
+        CurrPage.Update;
+    end;
+
+    local procedure SetDocNoVisible()
+    var
+        DocumentNoVisibility: Codeunit DocumentNoVisibility;
+        DocType: Option Quote,"Order",Invoice,"Credit Memo","Blanket Order","Return Order","None","Payment Voucher","Petty Cash",Imprest,Requisition,ImprestSurrender,Interbank,Receipt,"Staff Claim","Staff Advance",AdvanceSurrender,"Bank Slip",Grant,"Grant Surrender","Employee Requisition","Leave Application","Training Requisition","Transport Requisition",JV,"Grant Task","Concept Note",Proposal,"Job Approval","Disciplinary Approvals",GRN,Clearence,Donation,Transfer,PayChange,Budget,GL,"Cash Purchase","Leave Reimburse",Appraisal,Inspection,Closeout,"Lab Request",ProposalProjectsAreas,"Leave Carry over","IB Transfer",EmpTransfer,LeavePlanner,HrAssetTransfer;
+    begin
+        //DocNoVisible := DocumentNoVisibility.FundsMgtDocumentNoIsVisible(DocType::ImprestSurrender,No);
+    end;
+
     local procedure SetControlAppearance()
     var
         ApprovalsMgmt: Codeunit "Approvals Mgmt.";
     begin
         OpenApprovalEntriesExistForCurrUser := ApprovalsMgmt.HasOpenApprovalEntriesForCurrentUser(Rec.RecordId);
         OpenApprovalEntriesExist := ApprovalsMgmt.HasOpenApprovalEntries(Rec.RecordId);
+    end;
+
+    procedure LinesExists(): Boolean
+    var
+        PayLines: Record "Imprest Surrender Details";
+    begin
+        HasLines := false;
+        PayLines.Reset;
+        PayLines.SetRange(PayLines."Surrender Doc No.", Rec.No);
+        if PayLines.Find('-') then begin
+            HasLines := true;
+            exit(HasLines);
+        end;
+    end;
+
+    procedure AllFieldsEntered(): Boolean
+    var
+        PayLines: Record "Imprest Surrender Details";
+    begin
+        AllKeyFieldsEntered := true;
+        PayLines.Reset;
+        PayLines.SetRange(PayLines."Surrender Doc No.", Rec.No);
+        if PayLines.Find('-') then begin
+            repeat
+                if (PayLines."Account No:" = '') or (PayLines.Amount <= 0) then
+                    AllKeyFieldsEntered := false;
+            until PayLines.Next = 0;
+            exit(AllKeyFieldsEntered);
+        end;
+    end;
+
+    procedure LinesCommitmentStatus() Exists: Boolean
+    var
+        BCsetup: Record "Budgetary Control Setup";
+        PayLine: Record "Imprest Surrender Details";
+    begin
+        if BCsetup.Get() then begin
+            if not BCsetup.Mandatory then begin
+                Exists := false;
+                exit;
+            end;
+        end else begin
+            Exists := false;
+            exit;
+        end;
+        Exists := false;
+        PayLine.Reset;
+        PayLine.SetRange(PayLine."Surrender Doc No.", Rec.No);
+        //PayLine.SETRANGE(PayLine.Committed,FALSE);
+        //PayLine.SETRANGE(PayLine."Budgetary Control A/C",TRUE);
+        if PayLine.Find('-') then
+            Exists := true;
     end;
 }
 

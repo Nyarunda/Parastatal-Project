@@ -1,76 +1,143 @@
-page 51533444 "Imprest Vouchers List"
+page 51533445 "Imprest Request Header"
 {
-    Caption = 'Travel Advance Requisitions';
-    CardPageID = "Imprest Request Header";
-    PageType = List;
+    Caption = 'Imprest Request';
+    DeleteAllowed = false;
+    PageType = Document;
     PromotedActionCategories = 'New,Process,Reports,Approval,Budgetary Control,Cancellation,Category7_caption,Category8_caption,Approval_Details,Category10_caption';
+    RefreshOnActivate = true;
     SourceTable = "Imprest Header";
-    SourceTableView = WHERE(Posted = FILTER(false),
-                            Status = FILTER(<> Rejected));
+    SourceTableView = WHERE(Posted = FILTER(false));
 
     layout
     {
         area(content)
         {
-            repeater(Group)
+            group(Control1)
             {
+                ShowCaption = false;
                 field("No."; Rec."No.")
                 {
+                    Editable = false;
                 }
                 field(Date; Rec.Date)
                 {
+                    //Editable = Rec.DateEditable;
+
+                    trigger OnValidate()
+                    begin
+                        CurrPage.Update;
+                    end;
+                }
+                field("Global Dimension 1 Code"; Rec."Global Dimension 1 Code")
+                {
+                    Caption = 'Department Code';
+                    //Editable = Rec.GlobalDimension1CodeEditable;
+                }
+                field("Function Name"; Rec."Function Name")
+                {
+                    Caption = 'Description';
+                    Editable = false;
+                }
+                field("Shortcut Dimension 2 Code"; Rec."Shortcut Dimension 2 Code")
+                {
+                    Caption = 'Division Code';
+                    // Editable = Rec.ShortcutDimension2CodeEditable;
+                }
+                field("Budget Center Name"; Rec."Budget Center Name")
+                {
+                    Caption = 'Description';
+                    Editable = false;
+                }
+                field("Shortcut Dimension 5 Code"; Rec."Shortcut Dimension 5 Code")
+                {
+                }
+                field("Responsibility Center"; Rec."Responsibility Center")
+                {
+                }
+                field("Account Type"; Rec."Account Type")
+                {
+                    Editable = false;
                 }
                 field("Account No."; Rec."Account No.")
                 {
+                    Editable = true;
                 }
                 field(Payee; Rec.Payee)
                 {
+                    Enabled = false;
                 }
                 field("Currency Code"; Rec."Currency Code")
                 {
+                    //Editable = "Currency CodeEditable";
                 }
                 field("Paying Bank Account"; Rec."Paying Bank Account")
                 {
+                    //Editable = Rec."Paying Bank AccountEditable";
                 }
                 field("Bank Name"; Rec."Bank Name")
                 {
+                    Editable = false;
                 }
-                field("Total Net Amount"; Rec."Total Net Amount")
+                field(Purpose; Rec.Purpose)
                 {
                 }
-                field("Exchange Rate"; Rec."Exchange Rate")
+                field(Designation; Rec.Designation)
+                {
+                    Caption = 'External Document No.';
+                }
+                field(Cashier; Rec.Cashier)
+                {
+                    Caption = 'Requestor ID';
+                    Enabled = false;
+                }
+                field(Status; Rec.Status)
+                {
+                    Editable = true;
+                }
+                field("Total Net Amount"; Rec."Total Net Amount")
                 {
                 }
                 field("Total Net Amount LCY"; Rec."Total Net Amount LCY")
                 {
                 }
-                field("Current Status"; Rec."Current Status")
+                field("Payment Release Date"; Rec."Payment Release Date")
+                {
+                    Caption = 'Posting Date';
+                    //Editable = "Payment Release DateEditable";
+                }
+                field("External Doc No"; Rec."External Doc No")
                 {
                 }
-                field(Cashier; Rec.Cashier)
+                field("Pay Mode"; Rec."Pay Mode")
                 {
                 }
-                field(Status; Rec.Status)
+                field("Cheque No."; Rec."Cheque No.")
                 {
+                    Caption = 'Cheque/EFT No.';
+                    //Editable = "Cheque No.Editable";
                 }
                 field("Employee Number"; Rec."Employee Number")
                 {
+                    Visible = false;
+                }
+                field(RecID; Format(Rec.RecordId))
+                {
+                    Visible = false;
                 }
             }
-        }
-        area(factboxes)
-        {
-            systempart(Control1102755015; Notes)
+            /**
+            part(PVLines; "Imprest Request Details")
             {
+                SubPageLink = No=FIELD("No.");
             }
-            systempart(Control1102755016; MyNotes)
+            **/
+            systempart(Control5; Links)
             {
+                Visible = true;
             }
-            systempart(Control1102755017; Outlook)
+            systempart(Control3; Notes)
             {
-            }
-            systempart(Control1102755018; Links)
-            {
+                Visible = true;
             }
         }
     }
@@ -79,10 +146,10 @@ page 51533444 "Imprest Vouchers List"
     {
         area(processing)
         {
-            group("<Action1102755006>")
+            group("&Functions")
             {
                 Caption = '&Functions';
-                action("<Action1102755024>")
+                action("Post Payment")
                 {
                     Caption = 'Post Payment';
                     Image = Post;
@@ -92,16 +159,33 @@ page 51533444 "Imprest Vouchers List"
 
                     trigger OnAction()
                     begin
-                        CheckImprestRequiredItems;
-                        PostImprest;
+                        CheckImprestRequiredItems(Rec);
+                        PostImprest(Rec);
+                        /*
+                              RESET;
+                              SETFILTER("No.","No.");
+                              REPORT.RUN(39005885,TRUE,TRUE,Rec);
+                              RESET;
+                         */
+
                     end;
                 }
-                separator(Separator1102755025)
+                separator(Separator1102755026)
                 {
                 }
-                action("<Action1102755031>")
+                action("Co&mments")
                 {
-                    Caption = 'Check Budgetary Availability';
+                    Caption = 'Co&mments';
+                    Image = ViewComments;
+                    Promoted = true;
+                    PromotedCategory = Category5;
+                    PromotedIsBig = true;
+                    RunObject = Page "Approval Comments";
+                    RunPageLink = "Document No." = FIELD("No.");
+                }
+                action("Check Budget Commitment")
+                {
+                    Caption = 'Check Budget Commitment';
                     Image = Balance;
                     Promoted = true;
                     PromotedCategory = Category5;
@@ -122,24 +206,24 @@ page 51533444 "Imprest Vouchers List"
                         if not AllFieldsEntered then
                             Error('Some of the Key Fields on the Lines:[ACCOUNT NO.,AMOUNT] Have not been Entered please RECHECK your entries');
 
-
                         //First Check whether other lines are already committed.
                         /**
                         Commitments.Reset;
                         Commitments.SetRange(Commitments."Document Type", Commitments."Document Type"::Imprest);
-                        Commitments.SetRange(Commitments."Document No.", Rec."No.");
+                        Commitments.SetRange(Commitments."Document No.", "No.");
                         if Commitments.Find('-') then begin
                             if Confirm('Lines in this Document appear to be committed do you want to re-commit?', false) = false then begin exit end;
                             Commitments.Reset;
                             Commitments.SetRange(Commitments."Document Type", Commitments."Document Type"::Imprest);
-                            Commitments.SetRange(Commitments."Document No.", Rec."No.");
+                            Commitments.SetRange(Commitments."Document No.", "No.");
                             Commitments.DeleteAll;
                         end;
                         **/
-                        // CheckBudgetAvail.CheckImprest(Rec);
+
+                        CheckBudgetAvail.CheckImprest(Rec);
                     end;
                 }
-                action("<Action1102755032>")
+                action("Cancel Budget Commitment")
                 {
                     Caption = 'Cancel Budget Commitment';
                     Image = Cancel;
@@ -152,10 +236,11 @@ page 51533444 "Imprest Vouchers List"
                         if Confirm('Do you Wish to Cancel the Commitment entries for this document', false) = false then begin exit end;
                         /**
                         Commitments.Reset;
-                        Commitments.SetRange(Commitments."Document Type", Commitments."Document Type"::"Payment Voucher");
-                        Commitments.SetRange(Commitments."Document No.", Rec."No.");
+                        Commitments.SetRange(Commitments."Document Type", Commitments."Document Type"::Imprest);
+                        Commitments.SetRange(Commitments."Document No.", "No.");
                         Commitments.DeleteAll;
                         **/
+
                         PayLine.Reset;
                         PayLine.SetRange(PayLine.No, Rec."No.");
                         if PayLine.Find('-') then begin
@@ -166,31 +251,31 @@ page 51533444 "Imprest Vouchers List"
                         end;
                     end;
                 }
-                separator(Separator1102755022)
+                separator(Separator1102755033)
                 {
                 }
-                action("<Action1102755010>")
+                action("Print/Preview")
                 {
                     Caption = 'Print/Preview';
+                    Image = ConfirmAndPrint;
                     Promoted = true;
                     PromotedCategory = "Report";
                     PromotedIsBig = true;
 
                     trigger OnAction()
                     begin
-                        // IF Status<>Status::Approved THEN
-                        //  ERROR('You can only print after the document is Approved');
-
+                        if Rec.Status <> Rec.Status::"Pending Approval" then
+                            Error('You can only print after the document is Approved');
                         Rec.Reset;
                         Rec.SetFilter("No.", Rec."No.");
-                        //REPORT.Run(REPORT::"Travel Advance Report",true,false,Rec);
+                        //REPORT.Run(REPORT::"Travel Advance Report", true, false, Rec);
                         Rec.Reset;
                     end;
                 }
-                separator(Separator1102755020)
+                separator(Separator1102756006)
                 {
                 }
-                action("<Action1102756007>")
+                action("Cancel Document")
                 {
                     Caption = 'Cancel Document';
                     Image = Cancel;
@@ -230,6 +315,10 @@ page 51533444 "Imprest Vouchers List"
                     var
                         ApprovalsMgmt: Codeunit "Approvals Mgmt.";
                     begin
+                        if not (Rec.Status = Rec.Status::Open) then begin
+                            Error('Document must be Pending/Open');
+                        end;
+
                         if not LinesExists then
                             Error('There are no Lines created for this Document');
 
@@ -240,7 +329,8 @@ page 51533444 "Imprest Vouchers List"
                         if LinesCommitmentStatus then
                             Error('There are some lines that have not been committed');
 
-                        VarVariant := Rec;
+                        if Rec.Status = Rec.Status::Open then
+                            VarVariant := Rec;
                         //if CustomApprovals.CheckApprovalsWorkflowEnabled(VarVariant) then
                         //    CustomApprovals.OnSendDocForApproval(VarVariant);
                     end;
@@ -248,7 +338,6 @@ page 51533444 "Imprest Vouchers List"
                 action(CancelApprovalRequest)
                 {
                     Caption = 'Cancel Approval Re&quest';
-                    Enabled = OpenApprovalEntriesExist;
                     Image = Cancel;
                     Promoted = true;
                     PromotedCategory = Category9;
@@ -287,34 +376,138 @@ page 51533444 "Imprest Vouchers List"
                     end;
                 }
             }
+            group(Approval)
+            {
+                Caption = 'Approval';
+                action(Approve)
+                {
+                    Caption = 'Approve';
+                    Image = Approve;
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedIsBig = true;
+                    Visible = OpenApprovalEntriesExistForCurrUser;
+
+                    trigger OnAction()
+                    var
+                        ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+                    begin
+                        ApprovalsMgmt.ApproveRecordApprovalRequest(Rec.RecordId)
+                    end;
+                }
+                action(Reject)
+                {
+                    Caption = 'Reject';
+                    Image = Reject;
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedIsBig = true;
+                    Visible = OpenApprovalEntriesExistForCurrUser;
+
+                    trigger OnAction()
+                    var
+                        ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+                    begin
+                        ApprovalsMgmt.RejectRecordApprovalRequest(Rec.RecordId)
+                    end;
+                }
+                action(Delegate)
+                {
+                    Caption = 'Delegate';
+                    Image = Delegate;
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    Visible = OpenApprovalEntriesExistForCurrUser;
+
+                    trigger OnAction()
+                    var
+                        ApprovalsMgmt: Codeunit "Approvals Mgmt.";
+                    begin
+                        ApprovalsMgmt.DelegateRecordApprovalRequest(Rec.RecordId)
+                    end;
+                }
+                action(Comment)
+                {
+                    Caption = 'Comments';
+                    Image = ViewComments;
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    RunObject = Page "Approval Comments";
+                    RunPageLink = "Table ID" = CONST(39005527),
+                                  "Document No." = FIELD("No.");
+                    Visible = OpenApprovalEntriesExistForCurrUser;
+                }
+            }
         }
     }
 
+    trigger OnAfterGetRecord()
+    begin
+        OnAfterGetCurrRecord;
+        SetControlAppearance;
+    end;
+
+    trigger OnInit()
+    begin
+        "Currency CodeEditable" := true;
+        DateEditable := true;
+        ShortcutDimension2CodeEditable := true;
+        GlobalDimension1CodeEditable := true;
+        "Cheque No.Editable" := true;
+        "Pay ModeEditable" := true;
+        "Paying Bank AccountEditable" := true;
+        "Payment Release DateEditable" := true;
+        UpdateControls;
+    end;
+
     trigger OnInsertRecord(BelowxRec: Boolean): Boolean
     begin
-        //check if the documenent has been added while another one is still pending
-        ImprestHdr.Reset;
-        //TravAccHeader.SETRANGE(SaleHeader."Document Type",SaleHeader."Document Type"::"Cash Sale");
-        ImprestHdr.SetRange(ImprestHdr.Cashier, UserId);
-        ImprestHdr.SetRange(ImprestHdr.Status, ImprestHdr.Status::Open);
+        if GuiAllowed then begin
+            //check if the documenent has been added while another one is still pending
+            TravReqHeader.Reset;
+            //TravAccHeader.SETRANGE(SaleHeader."Document Type",SaleHeader."Document Type"::"Cash Sale");
+            TravReqHeader.SetRange(TravReqHeader.Cashier, UserId);
+            TravReqHeader.SetRange(TravReqHeader.Status, Rec.Status::Open);
 
-        if ImprestHdr.Count > 0 then begin
-            Error('There are still some pending document(s) on your account. Please list & select the pending document to use.  ');
+            if TravReqHeader.Count > 0 then begin
+                //ERROR('There are still some pending document(s) on your account. Please list & select the pending document to use.  ');
+            end;
+
+            TravReqHeader.Reset;
+            TravReqHeader.SetRange(TravReqHeader.Cashier, UserId);
+            TravReqHeader.SetRange(TravReqHeader.Status, Rec.Status::Approved);
+
+            if TravReqHeader.Count > 0 then begin
+                //  ERROR('There are still some document(s) pending approval on your account.');
+            end;
+            TravReqHeader.Reset;
+            TravReqHeader.SetRange(TravReqHeader.Cashier, UserId);
+            TravReqHeader.SetRange(TravReqHeader.Status, Rec.Status::Approved);
+
+            if TravReqHeader.Count > 0 then begin
+                //ERROR('There are still somedocument(s)  pending  posting on your account.');
+            end;
+            //*********************************END ****************************************//
         end;
-        //*********************************END ****************************************//
+
+        //Rec."Payment Type" := "Payment Type"::Imprest;
+        Rec."Account Type" := "Account Type"::Customer;
+        //CurrPage.UPDATE;
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean)
     begin
-        //check if the documenent has been added while another one is still pending
-        ImprestHdr.Reset;
-        //TravAccHeader.SETRANGE(SaleHeader."Document Type",SaleHeader."Document Type"::"Cash Sale");
-        ImprestHdr.SetRange(ImprestHdr.Cashier, UserId);
-        ImprestHdr.SetRange(ImprestHdr.Status, ImprestHdr.Status::Open);
-
-        if ImprestHdr.Count > 0 then begin
-            Error('There are still some pending document(s) on your account. Please list & select the pending document to use.  ');
-        end;
+        Rec."Responsibility Center" := UserMgt.GetPurchasesFilter();
+        //Add dimensions if set by default here
+        //Rec."Global Dimension 1 Code" := UserMgt.GetSetDimensions(UserId, 1);
+        Rec.Validate("Global Dimension 1 Code");
+        //Rec."Shortcut Dimension 2 Code" := UserMgt.GetSetDimensions(UserId, 2);
+        Rec.Validate("Shortcut Dimension 2 Code");
+        //Rec."Shortcut Dimension 5 Code" := UserMgt.GetSetDimensions(UserId, 3);
+        Rec.Validate("Shortcut Dimension 5 Code");
+        //Rec."Shortcut Dimension 4 Code" := UserMgt.GetSetDimensions(UserId, 4);
+        Rec.Validate("Shortcut Dimension 4 Code");
+        //OnAfterGetCurrRecord;
     end;
 
     trigger OnOpenPage()
@@ -324,13 +517,8 @@ page 51533444 "Imprest Vouchers List"
             Rec.SetRange("Responsibility Center", UserMgt.GetPurchasesFilter());
             Rec.FilterGroup(0);
         end;
-        /*
-        FILTERGROUP(2);
-        SETRANGE(Cashier,USERID);
-        FILTERGROUP(0);
-        */
-        Rec.SetFilter(Cashier, UserId);
-
+        UpdateControls;
+        SetDocNoVisible;
     end;
 
     var
@@ -358,7 +546,7 @@ page 51533444 "Imprest Vouchers List"
         //Commitments: Record Committments;
         UserMgt: Codeunit "User Setup Management";
         JournlPosted: Codeunit "Journal Post Successful";
-        DocumentType: Option Quote,"Order",Invoice,"Credit Memo","Blanket Order","Return Order","None","Payment Voucher","Petty Cash",Imprest,Requisition;
+        DocumentType: Option Quote,"Order",Invoice,"Credit Memo","Blanket Order","Return Order","None",JV,"Member Closure","Account Opening",Batches,Loan,Checkoff,"FOSA Account Opening",StandingOrder,HRJob,HRLeave,"HRTransport Request",HRTraining,"HREmp Requsition",MicroTrans,"Account Reactivation","Overdraft ",BLA,"Member Editable","MSacco Applications","MSacco PinChange","MSacco PhoneChange","MSacco TransChange",BulkSMS,"Payment Voucher","Petty Cash",Imp,Requisition,ImpSurr,Interbank,Receipt,"Staff Claim","Staff Adv",AdvSurr,OT;
         HasLines: Boolean;
         AllKeyFieldsEntered: Boolean;
         Doc_Type: Option LPO,Requisition,Imprest,"Payment Voucher",PettyCash;
@@ -384,6 +572,8 @@ page 51533444 "Imprest Vouchers List"
         DateEditable: Boolean;
         [InDataSet]
         "Currency CodeEditable": Boolean;
+        TravReqHeader: Record "Imprest Header";
+        DocNoVisible: Boolean;
         "NOT OpenApprovalEntriesExist": Boolean;
         OpenApprovalEntriesExistForCurrUser: Boolean;
         OpenApprovalEntriesExist: Boolean;
@@ -412,7 +602,7 @@ page 51533444 "Imprest Vouchers List"
             Exists := true;
     end;
 
-    procedure PostImprest()
+    procedure PostImprest(Rec: Record "Imprest Header")
     begin
 
         if Temp.Get(UserId) then begin
@@ -435,7 +625,7 @@ page 51533444 "Imprest Vouchers List"
         GenJnlLine."Account Type" := GenJnlLine."Account Type"::Customer;
         GenJnlLine."Account No." := Rec."Account No.";
         GenJnlLine.Validate(GenJnlLine."Account No.");
-        GenJnlLine.Description := 'Imprest: ' + Rec."Account No." + ':' + Rec.Payee;
+        GenJnlLine.Description := CopyStr('Imprest: ' + Rec."Account No." + ':' + Rec.Payee, 1, 50);
         Rec.CalcFields("Total Net Amount");
         GenJnlLine.Amount := Rec."Total Net Amount";
         GenJnlLine.Validate(GenJnlLine.Amount);
@@ -455,7 +645,9 @@ page 51533444 "Imprest Vouchers List"
         GenJnlLine.Validate(GenJnlLine."Shortcut Dimension 1 Code");
         GenJnlLine."Shortcut Dimension 2 Code" := Rec."Shortcut Dimension 2 Code";
         GenJnlLine.Validate(GenJnlLine."Shortcut Dimension 2 Code");
-        GenJnlLine.ValidateShortcutDimCode(3, Rec."Shortcut Dimension 5 Code");
+        GenJnlLine."Shortcut Dimension 3 Code" := Rec."Shortcut Dimension 5 Code";
+        GenJnlLine.Validate(GenJnlLine."Shortcut Dimension 3 Code");
+        //GenJnlLine.ValidateShortcutDimCode(3,"Shortcut Dimension 3 Code");
         GenJnlLine.ValidateShortcutDimCode(4, Rec."Shortcut Dimension 4 Code");
 
         if GenJnlLine.Amount <> 0 then
@@ -465,22 +657,23 @@ page 51533444 "Imprest Vouchers List"
         GenJnlLine.Reset;
         GenJnlLine.SetRange(GenJnlLine."Journal Template Name", JTemplate);
         GenJnlLine.SetRange(GenJnlLine."Journal Batch Name", JBatch);
-        CODEUNIT.Run(CODEUNIT::"Gen. Jnl.-Post Line", GenJnlLine);
+        CODEUNIT.Run(CODEUNIT::"Gen. Jnl.-Post", GenJnlLine);
 
         Post := false;
         Post := JournlPosted.PostedSuccessfully();
         if Post then begin
-            Rec.Posted := true;
-            Rec."Date Posted" := Today;
-            Rec."Time Posted" := Time;
-            Rec."Posted By" := UserId;
-            Rec.Status := Rec.Status::Cancelled;
-            Rec.Modify;
+
         end;
+        Rec.Posted := true;
+        Rec."Date Posted" := Today;
+        Rec."Time Posted" := Time;
+        Rec."Posted By" := UserId;
+        Rec.Status := Rec.Status::Cancelled;
+        Rec.Modify;
 
     end;
 
-    procedure CheckImprestRequiredItems()
+    procedure CheckImprestRequiredItems(Rec: Record "Imprest Header")
     begin
 
         Rec.TestField("Payment Release Date");
@@ -551,7 +744,6 @@ page 51533444 "Imprest Vouchers List"
             DateEditable := false;
             //CurrForm."Account No.".EDITABLE:=FALSE;
             "Currency CodeEditable" := false;
-            //CurrForm."Paying Bank Account".EDITABLE:=TRUE;
             CurrPage.Update;
         end
     end;
@@ -578,7 +770,7 @@ page 51533444 "Imprest Vouchers List"
         PayLines.SetRange(PayLines.No, Rec."No.");
         if PayLines.Find('-') then begin
             repeat
-                if (PayLines."Account No:" = '') or (PayLines.Amount <= 0) then
+                if (PayLines."Account No:" = '') or (PayLines.Purpose = '') or (PayLines.Amount <= 0) then
                     AllKeyFieldsEntered := false;
             until PayLines.Next = 0;
             exit(AllKeyFieldsEntered);
@@ -589,6 +781,14 @@ page 51533444 "Imprest Vouchers List"
     begin
         xRec := Rec;
         UpdateControls();
+    end;
+
+    local procedure SetDocNoVisible()
+    var
+        DocumentNoVisibility: Codeunit DocumentNoVisibility;
+        DocType: Option Quote,"Order",Invoice,"Credit Memo","Blanket Order","Return Order","None","Payment Voucher","Petty Cash",Imprest,Requisition,ImprestSurrender,Interbank,Receipt,"Staff Claim","Staff Advance",AdvanceSurrender,"Bank Slip",Grant,"Grant Surrender","Employee Requisition","Leave Application","Training Requisition","Transport Requisition",JV,"Grant Task","Concept Note",Proposal,"Job Approval","Disciplinary Approvals",GRN,Clearence,Donation,Transfer,PayChange,Budget,GL,"Cash Purchase","Leave Reimburse",Appraisal,Inspection,Closeout,"Lab Request",ProposalProjectsAreas,"Leave Carry over","IB Transfer",EmpTransfer,LeavePlanner,HrAssetTransfer;
+    begin
+        //DocNoVisible := DocumentNoVisibility.FundsMgtDocumentNoIsVisible(DocType::Imprest,"No.");
     end;
 
     local procedure SetControlAppearance()
