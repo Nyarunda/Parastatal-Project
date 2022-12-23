@@ -1,4 +1,4 @@
-page 51533957 "Purchase Inspection list"
+page 51533909 "Purchase Inspection list"
 {
     CardPageID = "Purchase Inspection Card";
     Editable = false;

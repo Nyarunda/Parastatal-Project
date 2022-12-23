@@ -1,4 +1,4 @@
-page 51533964 "RFQ List all"
+page 51533908 "RFQ List all"
 {
     CardPageID = "Request For Quotation";
     PageType = List;
@@ -10,32 +10,32 @@ page 51533964 "RFQ List all"
         {
             repeater(General)
             {
-                field("No.";"No.")
+                field("No."; Rec."No.")
                 {
                 }
-                field(Description;"Posting Description")
+                field(Description; Rec."Posting Description")
                 {
                     Caption = 'Description';
                 }
-                field("Expected Closing Date";"Expected Closing Date")
+                field("Expected Closing Date"; Rec."Expected Closing Date")
                 {
                 }
-                field("Global Dimension 1 Code";"Global Dimension 1 Code")
+                field("Global Dimension 1 Code"; Rec."Global Dimension 1 Code")
                 {
                 }
-                field("Shortcut Dimension 2 Code";"Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code"; Rec."Shortcut Dimension 2 Code")
                 {
                 }
-                field(Status;Status)
+                field(Status; Rec.Status)
                 {
                 }
-                field("Ship-to Code";"Ship-to Code")
+                field("Ship-to Code"; Rec."Ship-to Code")
                 {
                 }
-                field("Ship-to Name";"Ship-to Name")
+                field("Ship-to Name"; Rec."Ship-to Name")
                 {
                 }
-                field("Currency Code";"Currency Code")
+                field("Currency Code"; Rec."Currency Code")
                 {
                 }
             }
