@@ -116,6 +116,7 @@ page 51533919 "Tender Committe Activities"
                             HRActivityApprovalEntry.DeleteAll;
 
                         //GET ONLY ACTIVE EMPLOYEES
+                        /**
                         InternalMemoLines.Reset;
                         InternalMemoLines.SetRange(InternalMemoLines."Document No.", Rec."Memo No.");
                         InternalMemoLines.FindFirst;
@@ -130,6 +131,7 @@ page 51533919 "Tender Committe Activities"
                             until InternalMemoLines.Next = 0;
                             Message('Completed Successfully');
                         end;
+                        **/
                     end;
                 }
                 action("Notify Participants ")
@@ -273,13 +275,13 @@ page 51533919 "Tender Committe Activities"
                     trigger OnAction()
                     var
                         ApprovalMgt: Codeunit "Approvals Mgmt.";
-                        Commitments: Record Committments;
+                        //Commitments: Record Committments;
                         ApprovalsMgmt: Codeunit "Approvals Mgmt.";
                     begin
                         Rec.TestField(Status, Rec.Status::New);
                         VarVariant := Rec;
-                        if CustomApprovals.CheckApprovalsWorkflowEnabled(VarVariant) then
-                            CustomApprovals.OnSendDocForApproval(VarVariant);
+                        //if CustomApprovals.CheckApprovalsWorkflowEnabled(VarVariant) then
+                        //    CustomApprovals.OnSendDocForApproval(VarVariant);
                     end;
                 }
                 action("Cancel Approval")
@@ -296,7 +298,7 @@ page 51533919 "Tender Committe Activities"
                     begin
                         Rec.TestField(Status, Rec.Status::"Pending Approval");
                         VarVariant := Rec;
-                        CustomApprovals.OnCancelDocApprovalRequest(VarVariant);
+                        //CustomApprovals.OnCancelDocApprovalRequest(VarVariant);
                         //ApprovalMgt.OnCancelProfOpApprovalRequest(Rec);
                         Rec.TestField(Status, Rec.Status::Approved);
                         USetup.Get(UserId);
@@ -381,7 +383,7 @@ page 51533919 "Tender Committe Activities"
         HRCompanyActivities: Record "Tender Committee Activities";
         HRActivityApprovalEntry: Record "Tender Committee Members";
         //DocType: Option Quote,"Order",Invoice,CMemo,BlankOrder,"Ret Order","None",PV,"Petty Cash",Imp,Requisition,ImpSurr,Interbank,Receipt,"Staff Claim","Staff Adv",AdvSurr,"Bank Slip",Grant,"Grant Surr","Emp Req","Leave Application","Training Requisition","Transport Requisition",JV,"Grant Task","Concept Note",Proposal,"Job Approval","Disciplinary Approvals",GRN,Clearence,Donation,Transfer,PayChange,Budget,GL,"Cash Purchase","Leave Reimburse",Appraisal,Inspection,Closeout,"Lab Request",ProposalProjectsAreas,"Leave Carry over","IB Transfer",EmpTransfer,LeavePlanner,HrAssetTransfer,Contract,Project,MR,Inves,PB,Prom,Ind,Conf,BSC,OT,Jobsucc,SuccDetails,Qualified,Disc,ChDetai,Separation,TNeed,Grievance,CompAct,TenderMember;
-        DocType: Enum "Custome Document Types";
+        DocType: Enum "Document Types";
         Text001: Label 'All Participants have been notified via E-Mail';
         GenJournal: Record "Gen. Journal Line";
         LineNo: Integer;
@@ -390,10 +392,9 @@ page 51533919 "Tender Committe Activities"
         VarVariant: Variant;
         ApprovalEntries: Page "Approval Entries";
         ApprovalComments: Page "Approval Comments";
-        InternalMemoLines: Record "Internal Memo Lines";
         ApprovalsMgmt: Codeunit "Approvals Mgmt.";
         CI: Record "Company Information";
-        CustomApprovals: Codeunit "Custom Approval Management";
+        //CustomApprovals: Codeunit "Custom Approval Management";
         DTime: Date;
         USetup: Record "User Setup";
 

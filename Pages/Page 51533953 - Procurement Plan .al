@@ -1,4 +1,4 @@
-page 51533915 "Procurement Plan"
+page 51533911 "Procurement Plan"
 {
     Editable = true;
     MultipleNewLines = false;
@@ -137,17 +137,18 @@ page 51533915 "Procurement Plan"
 
                     trigger OnAction()
                     begin
+                        /**
                         DMSint.Reset;
                         DMSint.SetRange(DMSint."DMS Link Type", DMSint."DMS Link Type"::DMSAttach);
                         if DMSint.Find('-') then begin
 
-                            HyperLink(DMSint."DMS Link Path" + '&dt_code=DT_1_1464075594713&dtgcode=DTT_1_1464075644448&savetype=UPLOADONLY&spu_id=' + Rec."Workplan Code" +
-                         //'&txtPPD_ITEM_DESP='+"Workplan Code"+
-                         //'&txtPPD_PROC_MTHD='+"Global Dimension 1 Code"+
-                         //'&txtCRIV_DEPT='+"Responsibility Center"+
-                         '&attach_category=Procurement+Plan+Document')
-                        end;
-                    end;
+                             HyperLink(DMSint."DMS Link Path" + '&dt_code=DT_1_1464075594713&dtgcode=DTT_1_1464075644448&savetype=UPLOADONLY&spu_id=' + "Workplan Code" +
+                          '&txtPPD_ITEM_DESP=' + "Workplan Code" +
+                          '&txtPPD_PROC_MTHD=' + "Global Dimension 1 Code" +
+                          //'&txtCRIV_DEPT='+"Responsibility Center"+
+                          '&attach_category=Procurement+Plan+Document')
+                        end;s
+                    end; 
                 }
                 action("View Documents")
                 {
@@ -160,8 +161,8 @@ page 51533915 "Procurement Plan"
                         DMSint.SetRange(DMSint."DMS Link Type", DMSint."DMS Link Type"::DMSView);
                         if DMSint.Find('-') then begin
 
-                            HyperLink(DMSint."DMS Link Path" + '&dt_code=DT_1_1464075594713&dtgcode=DTT_1_1464075644448&spu_id=' + Rec."Workplan Code" +
-                            '&attach_category=Procurement+Plan+Document')
+                            //HyperLink(DMSint."DMS Link Path" + '&dt_code=DT_1_1464075594713&dtgcode=DTT_1_1464075644448&spu_id=' + "Workplan Code" +
+                            //'&attach_category=Procurement+Plan+Document')
                         end;
 
                     end;
@@ -183,21 +184,23 @@ page 51533915 "Procurement Plan"
                     trigger OnAction()
                     var
                         OldDimSetID: Integer;
-                    //DimMgt: Codeunit DimensionManagement;
+                        DimMgt: Codeunit DimensionManagement;
                     begin
-                        /* OldDimSetID := "Dimension Set ID";
-                         "Dimension Set ID" :=
-                           DimMgt.EditDimensionSet2(
-                             "Dimension Set ID",StrSubstNo('%1 %2','Procurement Plan',"No."),
-                             "Global Dimension 1 Code","Global Dimension 2 Code");
+                        /**
+                        OldDimSetID := "Dimension Set ID";
+                        "Dimension Set ID" :=
+                          DimMgt.EditDimensionSet2(
+                            "Dimension Set ID", StrSubstNo('%1 %2', 'Procurement Plan', "No."),
+                            "Global Dimension 1 Code", "Global Dimension 2 Code");
 
-                         if OldDimSetID <> "Dimension Set ID" then begin
-                           Modify;
-                         //  IF PurchLinesExist THEN
-                             //UpdateAllLineDim("Dimension Set ID",OldDimSetID);
-                         end; */
+                        if OldDimSetID <> "Dimension Set ID" then begin
+                            Modify;
+                            //  IF PurchLinesExist THEN
+                            //UpdateAllLineDim("Dimension Set ID",OldDimSetID);
+                        end;
 
                         CurrPage.SaveRecord;
+                        **/
                     end;
                 }
             }
@@ -222,7 +225,7 @@ page 51533915 "Procurement Plan"
         GLSelected: Boolean;
         ItemSelected: Boolean;
         PPA: Record "Procurement Plan Activities";
-        DMSint: Record "DMS Intergration";
+    //DMSint: Record "DMS Intergration";
 
     procedure SetSelection(var GLAcc: Record "Procurement Plan Activities")
     begin
@@ -289,9 +292,9 @@ page 51533915 "Procurement Plan"
         */
 
         //For Bold and Indentation
-        //NoEmphasize := "Account Type" <> "Account Type"::Posting;
-        //NameIndent := Indentation;
-        //NameEmphasize := "Account Type" <> "Account Type"::Posting;
+        NoEmphasize := Rec."Account Type" <> "Account Type"::Customer;
+        NameIndent := Rec.Indentation;
+        NameEmphasize := Rec."Account Type" <> "Account Type"::Customer;
 
     end;
 

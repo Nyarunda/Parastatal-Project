@@ -6,7 +6,7 @@ page 51533497 "Quotation Analysis List"
     SourceTable = "Quotation Analysis Header";
     SourceTableView = SORTING("No.")
                       ORDER(Descending)
-                      WHERE("Sent to Proc Officer"=CONST(false));
+                      WHERE("Sent to Proc Officer" = CONST(false));
 
     layout
     {
@@ -14,28 +14,28 @@ page 51533497 "Quotation Analysis List"
         {
             repeater(Group)
             {
-                field("No.";"No.")
+                field("No."; Rec."No.")
                 {
                 }
-                field("RFQ No.";"RFQ No.")
+                field("RFQ No."; Rec."RFQ No.")
                 {
                 }
-                field("Shortcut Dimension 1 Code";"Shortcut Dimension 1 Code")
+                field("Shortcut Dimension 1 Code"; Rec."Shortcut Dimension 1 Code")
                 {
                 }
-                field("Shortcut Dimension 2 Code";"Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code"; Rec."Shortcut Dimension 2 Code")
                 {
                 }
-                field("Document Date";"Document Date")
+                field("Document Date"; Rec."Document Date")
                 {
                 }
-                field(Status;Status)
+                field(Status; Rec.Status)
                 {
                 }
-                field("Evaluation Status";"Evaluation Status")
+                field("Evaluation Status"; Rec."Evaluation Status")
                 {
                 }
-                field("Created By";"Created By")
+                field("Created By"; Rec."Created By")
                 {
                 }
             }

@@ -23,5 +23,20 @@ tableextension 51532003 "User Setup Ext" extends "User Setup"
             Caption = 'Edit Work Plan Activites';
             DataClassification = ToBeClassified;
         }
+        field(6004; "Responsibility Center"; code[50])
+        {
+            Caption = 'Responsibility Center';
+            DataClassification = ToBeClassified;
+        }
+        field(6005; "Global Dimension 1 Code"; Code[20])
+        {
+            Caption = 'Global Dimension 1 Code';
+            DataClassification = ToBeClassified;
+        }
+        field(6006; "Global Dimension 2 Code"; Code[20])
+        {
+            Caption = 'Global Dimension 2 Code';
+            DataClassification = ToBeClassified;
+        }
     }
 }

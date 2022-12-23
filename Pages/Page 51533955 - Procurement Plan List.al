@@ -177,13 +177,13 @@ page 51533914 "Procurement Plan List"
                         if Confirm('Are you sure to cancel this Procurement Plan?', true) then begin
                             //Post Reversal Entries for Commitments
                             PurchaseLine.Reset;
-                            PurchaseLine.SetRange(PurchaseLine."Workplan Code", Rec."Workplan Code");
+                            //PurchaseLine.SetRange(PurchaseLine."Workplan Code", Rec."Workplan Code");
                             if PurchaseLine.FindFirst then begin
                                 repeat
-                                    Commitments.Reset;
-                                    Commitments.SetRange(Commitments."Document Type", Commitments."Document Type"::Requisition);
-                                    Commitments.SetRange(Commitments."Document No.", PurchaseLine."Document No.");
-                                    Commitments.DeleteAll;
+                                /**Commitments.Reset;
+                                Commitments.SetRange(Commitments."Document Type", Commitments."Document Type"::Requisition);
+                                Commitments.SetRange(Commitments."Document No.", PurchaseLine."Document No.");
+                                Commitments.DeleteAll; **/
                                 until PurchaseLine.Next = 0;
                             end;
 
@@ -201,7 +201,7 @@ page 51533914 "Procurement Plan List"
         VarVariant: Variant;
         //CustomApprovals: Codeunit "Custom Approvals Codeunit2";
         PurchaseLine: Record "Purchase Line";
-        Commitments: Record Committments;
+    //Commitments: Record Committments;
 
     local procedure LinesExists(): Boolean
     var

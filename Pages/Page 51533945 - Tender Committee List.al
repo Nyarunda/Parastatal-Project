@@ -1,4 +1,4 @@
-page 51533945 "Tender Committee List"
+page 51533913 "Tender Committee List"
 {
     CardPageID = "Tender Committe Activities";
     DeleteAllowed = false;
@@ -15,31 +15,31 @@ page 51533945 "Tender Committee List"
             {
                 Editable = false;
                 ShowCaption = false;
-                field("Code";Code)
+                field("Code"; Rec.Code)
                 {
                 }
-                field("RFQ No.";"RFQ No.")
+                field("RFQ No."; Rec."RFQ No.")
                 {
                 }
-                field("RFQ Description";"RFQ Description")
+                field("RFQ Description"; Rec."RFQ Description")
                 {
                 }
-                field(Date;Date)
+                field(Date; Rec.Date)
                 {
                 }
-                field(Venue;Venue)
+                field(Venue; Rec.Venue)
                 {
                 }
-                field(Costs;Costs)
+                field(Costs; Rec.Costs)
                 {
                 }
-                field("Employee Responsible";"Employee Name")
+                field("Employee Responsible"; Rec."Employee Name")
                 {
                 }
-                field(Closed;Closed)
+                field(Closed; Rec.Closed)
                 {
                 }
-                field("Activity  Status>";"Activity Status")
+                field("Activity  Status>"; Rec."Activity Status")
                 {
                     Caption = 'Activity  Status';
                     Style = StrongAccent;
@@ -49,9 +49,9 @@ page 51533945 "Tender Committee List"
         }
         area(factboxes)
         {
-            part(Control1102755004;"Tender Activities Factbox")
+            part(Control1102755004; "Tender Activities Factbox")
             {
-                SubPageLink = Code=FIELD(Code);
+                SubPageLink = Code = FIELD(Code);
             }
         }
     }

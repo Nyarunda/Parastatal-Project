@@ -9,24 +9,24 @@ page 51533585 WorkplanActivities
         {
             repeater(Group)
             {
-                field("Workplan Code";"Workplan Code")
+                field("Workplan Code"; Rec."Workplan Code")
                 {
                 }
-                field("Activity Code";"Activity Code")
+                field("Activity Code"; Rec."Activity Code")
                 {
                     Caption = 'Activity Code';
                 }
-                field("Source Of Funds";"Source Of Funds")
+                field("Source Of Funds"; Rec."Source Of Funds")
                 {
                 }
-                field("Entry Type";"Entry Type")
+                field("Entry Type"; Rec."Entry Type")
                 {
                 }
-                field(Budget;Budget)
+                field(Budget; Rec.Budget)
                 {
                     TableRelation = "G/L Budget Name";
                 }
-                field("Account Type";"Account Type")
+                field("Account Type"; Rec."Account Type")
                 {
 
                     trigger OnValidate()
@@ -34,79 +34,79 @@ page 51533585 WorkplanActivities
                         //UpdateControls;
                     end;
                 }
-                field(Type;Type)
+                field(Type; Rec.Type)
                 {
                     Caption = 'Type';
                 }
-                field("No.";"No.")
+                field("No."; Rec."No.")
                 {
                 }
-                field(Description;Description)
+                field(Description; Rec.Description)
                 {
                 }
-                field("Activity Description";"Activity Description")
+                field("Activity Description"; Rec."Activity Description")
                 {
                 }
-                field("Global Dimension 1 Code";"Global Dimension 1 Code")
+                field("Global Dimension 1 Code"; Rec."Global Dimension 1 Code")
                 {
                     Caption = 'Department Code';
                 }
-                field("Shortcut Dimension 2 Code";"Shortcut Dimension 2 Code")
+                field("Shortcut Dimension 2 Code"; Rec."Shortcut Dimension 2 Code")
                 {
                     Caption = 'Division Code';
                 }
-                field(Period;Period)
+                field(Period; Rec.Period)
                 {
                 }
-                field("Proc. Method No.";"Proc. Method No.")
+                field("Proc. Method No."; Rec."Proc. Method No.")
                 {
                 }
-                field(Quantity;Quantity)
+                field(Quantity; Rec.Quantity)
                 {
                 }
-                field("Unit of Cost";"Unit of Cost")
+                field("Unit of Cost"; Rec."Unit of Cost")
                 {
                     Caption = ' Cost Per Unit';
                 }
-                field("Unit of Measure";"Unit of Measure")
+                field("Unit of Measure"; Rec."Unit of Measure")
                 {
                 }
-                field("Amount to Transfer";"Amount to Transfer")
+                field("Amount to Transfer"; Rec."Amount to Transfer")
                 {
 
                     trigger OnValidate()
                     begin
-                        "Amount to Transfer" := Quantity * "Unit of Cost";
+                        Rec."Amount to Transfer" := Rec.Quantity * Rec."Unit of Cost";
                     end;
                 }
-                field("Date to Transfer";"Date to Transfer")
+                field("Date to Transfer"; Rec."Date to Transfer")
                 {
                 }
-                field("Procurement Category";"Procurement Category")
+                field("Procurement Category"; Rec."Procurement Category")
                 {
                     Caption = 'Category';
                 }
-                field("Budgeted Amount";"Budgeted Amount")
+                field("Budgeted Amount"; Rec."Budgeted Amount")
                 {
                     Editable = false;
                 }
-                field("Uploaded to Procurement Workpl";"Uploaded to Procurement Workpl")
+                field("Uploaded to Procurement Workpl"; Rec."Uploaded to Procurement Workpl")
                 {
                     Editable = false;
                     Visible = true;
                 }
-                field("Converted to Budget";"Converted to Budget")
+                field("Converted to Budget"; Rec."Converted to Budget")
                 {
                     Editable = false;
                     Visible = false;
                 }
-                field("Document Date";"Document Date")
+                field("Document Date"; Rec."Document Date")
                 {
                 }
-                field("Include In Procurement Plan";"Include In Procurement Plan")
+                field("Include In Procurement Plan"; Rec."Include In Procurement Plan")
                 {
                 }
-                field(Status;Status)
+                field(Status; Rec.Status)
                 {
                     Editable = true;
                 }
@@ -120,7 +120,7 @@ page 51533585 WorkplanActivities
 
     trigger OnAfterGetCurrRecord()
     begin
-        "Document Date":=Today;
+        Rec."Document Date" := Today;
     end;
 }
 
