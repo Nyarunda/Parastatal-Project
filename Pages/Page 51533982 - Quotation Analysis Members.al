@@ -1,4 +1,4 @@
-page 51533982 "Quotation Analysis Members"
+page 51533906 "Quotation Analysis Members"
 {
     PageType = List;
     SourceTable = "Quotatin Analysis Members";
@@ -9,13 +9,13 @@ page 51533982 "Quotation Analysis Members"
         {
             repeater(Group)
             {
-                field("Staff Code";"Staff Code")
+                field("Staff Code"; Rec."Staff Code")
                 {
                 }
-                field("User Id";"User Id")
+                field("User Id"; Rec."User Id")
                 {
                 }
-                field("User Name";"User Name")
+                field("User Name"; Rec."User Name")
                 {
                 }
             }

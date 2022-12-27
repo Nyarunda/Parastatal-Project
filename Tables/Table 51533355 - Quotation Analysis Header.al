@@ -390,7 +390,7 @@ table 51533355 "Quotation Analysis Header"
         field(39005615; "Professional Opinion"; Code[10])
         {
             DataClassification = ToBeClassified;
-            TableRelation = "Professional Opinion"."No." WHERE(Status = CONST(Released));
+            //TableRelation = "Professional Opinion"."No." WHERE(Status = CONST(Released));
         }
         field(39005616; "Proc Officer Incharge"; Code[30])
         {
