@@ -1,7 +1,7 @@
-page 51533896 "Non Stock Category"
+page 51533435 "Vendor Categories"
 {
     PageType = List;
-    SourceTable = "No Stock Category";
+    SourceTable = "Vendor Categories";
 
     layout
     {
@@ -9,10 +9,10 @@ page 51533896 "Non Stock Category"
         {
             repeater(Group)
             {
-                field("Code"; Rec.Code)
+                field(Description; Rec.Description)
                 {
                 }
-                field(Description; Rec.Description)
+                field("Code"; Rec.Code)
                 {
                 }
             }

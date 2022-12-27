@@ -127,11 +127,8 @@ table 51533722 "HR Employees"
         {
             TableRelation = "Employee Statistics Group";
         }
-        field(31; Status; Option)
+        field(31; Status; Enum "Employees Status")
         {
-            OptionCaption = 'Active,Resigned,Discharged,Retrenched,Pension,Inactive,Retired';
-            OptionMembers = Active,Resigned,Discharged,Retrenched,Pension,Inactive,Retired;
-
             trigger OnValidate()
             begin
                 "Status Change Date" := Today;
@@ -275,12 +272,9 @@ table 51533722 "HR Employees"
         {
             OptionMembers = "Full Time"," Part Time",Contract;
         }
-        field(58; "Contract Type"; Option)
+        field(58; "Contract Type"; Enum "Contract Type")
         {
             Caption = 'Contract Status';
-            OptionCaption = 'Permanent & Pensionable,Contract,Casual,Secondment,Temporary,Graduate trainee,Intern,Attachment,Deployed,Beyond Zero';
-            OptionMembers = "Permanent & Pensionable",Contract,Casual,Secondment,"Temporary","Graduate trainee",Intern,Attachment,Deployed,"Beyond Zero";
-
             trigger OnValidate()
             begin
                 /**
