@@ -1,13 +1,13 @@
 table 51533155 prLatenessLedger
 {
-    DrillDownPageID = 39004056;
-    LookupPageID = 39004056;
+    //DrillDownPageID = 39004056;
+    //LookupPageID = 39004056;
 
     fields
     {
         field(1;"Employee Code";Code[30])
         {
-            TableRelation = "HR-Employee"."No.";
+            TableRelation = "HR Employees"."No.";
         }
         field(2;"Transaction Code";Code[30])
         {
