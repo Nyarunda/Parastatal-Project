@@ -11,40 +11,40 @@ page 51533140 "Pr Payroll Transactions Codes"
         {
             repeater(Group)
             {
-                field("Transaction Code";"Transaction Code")
+                field("Transaction Code"; Rec."Transaction Code")
                 {
                 }
-                field("Transaction Name";"Transaction Name")
+                field("Transaction Name"; Rec."Transaction Name")
                 {
                 }
-                field("Balance Type";"Balance Type")
+                field("Balance Type"; Rec."Balance Type")
                 {
                 }
-                field("Transaction Type";"Transaction Type")
+                field("Transaction Type"; Rec."Transaction Type")
                 {
                 }
-                field(Frequency;Frequency)
+                field(Frequency; Rec.Frequency)
                 {
                 }
-                field("Is Cash";"Is Cash")
+                field("Is Cash"; Rec."Is Cash")
                 {
                 }
-                field(Taxable;Taxable)
+                field(Taxable; Rec.Taxable)
                 {
                 }
-                field("Is Formula";"Is Formula")
+                field("Is Formula"; Rec."Is Formula")
                 {
                 }
-                field(Formula;Formula)
+                field(Formula; Rec.Formula)
                 {
                 }
-                field("Amount Preference";"Amount Preference")
+                field("Amount Preference"; Rec."Amount Preference")
                 {
                 }
-                field("Interest Rate";"Interest Rate")
+                field("Interest Rate"; Rec."Interest Rate")
                 {
                 }
-                field("GL Account";"GL Account")
+                field("GL Account"; Rec."GL Account")
                 {
                 }
             }

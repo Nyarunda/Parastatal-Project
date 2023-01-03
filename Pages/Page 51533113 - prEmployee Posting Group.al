@@ -10,48 +10,48 @@ page 51533113 "prEmployee Posting Group"
             repeater(Control1102756000)
             {
                 ShowCaption = false;
-                field("Code";Code)
+                field("Code"; Rec.Code)
                 {
                 }
-                field(Description;Description)
+                field(Description; Rec.Description)
                 {
                 }
-                field("Salary Account";"Salary Account")
+                field("Salary Account"; Rec."Salary Account")
                 {
                 }
-                field("Income Tax Account";"Income Tax Account")
+                field("Income Tax Account"; Rec."Income Tax Account")
                 {
                 }
-                field("SSF Employer Account";"SSF Employer Account")
+                field("SSF Employer Account"; Rec."SSF Employer Account")
                 {
                     Caption = 'SSF Employer Expense Account';
                 }
-                field("SSF Employee Account";"SSF Employee Account")
+                field("SSF Employee Account"; Rec."SSF Employee Account")
                 {
                     Caption = 'SSF Total Payable Account';
                 }
-                field("Net Salary Payable";"Net Salary Payable")
+                field("Net Salary Payable"; Rec."Net Salary Payable")
                 {
                 }
-                field("Payslip Report";"Payslip Report")
+                field("Payslip Report"; Rec."Payslip Report")
                 {
                 }
-                field("Eligible for Overtime";"Eligible for Overtime")
+                field("Eligible for Overtime"; Rec."Eligible for Overtime")
                 {
                 }
-                field("NHIF Employee Account";"NHIF Employee Account")
+                field("NHIF Employee Account"; Rec."NHIF Employee Account")
                 {
                 }
-                field("Tax Relief";"Tax Relief")
+                field("Tax Relief"; Rec."Tax Relief")
                 {
                 }
-                field("Tax Code";"Tax Code")
+                field("Tax Code"; Rec."Tax Code")
                 {
                 }
-                field("Pension Employer Acc";"Pension Employer Acc")
+                field("Pension Employer Acc"; Rec."Pension Employer Acc")
                 {
                 }
-                field("Pension Employee Acc";"Pension Employee Acc")
+                field("Pension Employee Acc"; Rec."Pension Employee Acc")
                 {
                 }
             }

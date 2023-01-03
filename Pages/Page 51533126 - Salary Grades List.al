@@ -11,13 +11,13 @@ page 51533126 "Salary Grades List"
             repeater(Control1102756000)
             {
                 ShowCaption = false;
-                field("Salary Grade";"Salary Grade")
+                field("Salary Grade"; Rec."Salary Grade")
                 {
                 }
-                field(Description;Description)
+                field(Description; Rec.Description)
                 {
                 }
-                field("Salary Amount";"Salary Amount")
+                field("Salary Amount"; Rec."Salary Amount")
                 {
                     Visible = false;
                 }
