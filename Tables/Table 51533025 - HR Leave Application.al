@@ -373,7 +373,7 @@ table 51533025 "HR Leave Application"
         ReturnDateLoop: Boolean;
         mSubject: Text[250];
         ApplicantsEmail: Text[30];
-        SMTP: Codeunit "SMTP Mail";
+        //SMTP: Codeunit "SMTP Mail";
         HRJournalLine: Record "HR Leave Journal Line";
         "LineNo.": Integer;
         ApprovalComments: Record "Approval Comment Line";
@@ -595,7 +595,7 @@ table 51533025 "HR Leave Application"
         Modify;
     end;
 
-    [Scope('Personalization')]
+    [Scope('Cloud')]
     procedure DetermineLeaveReturnDate_Portal(var fBeginDate: Date; var fDays: Decimal; var LeaveType: Code[30]) fReturnDate: Date
     begin
         varDaysApplied := fDays;

@@ -48,7 +48,7 @@ table 51533026 "HR Leave Journal Template"
             Caption = 'Reason Code';
             TableRelation = "Reason Code";
         }
-        field(13; "Test Report Name"; Text[80])
+        field(13; "Test Report Name"; Text[250])
         {
             CalcFormula = Lookup(AllObjWithCaption."Object Caption" WHERE("Object Type" = CONST(Report),
                                                                            "Object ID" = FIELD("Test Report ID")));
@@ -56,7 +56,7 @@ table 51533026 "HR Leave Journal Template"
             Editable = false;
             FieldClass = FlowField;
         }
-        field(14; "Form Name"; Text[80])
+        field(14; "Form Name"; Text[250])
         {
             CalcFormula = Lookup(AllObjWithCaption."Object Caption" WHERE("Object Type" = CONST(Page),
                                                                            "Object ID" = FIELD("Form ID")));
@@ -64,7 +64,7 @@ table 51533026 "HR Leave Journal Template"
             Editable = false;
             FieldClass = FlowField;
         }
-        field(15; "Posting Report Name"; Text[80])
+        field(15; "Posting Report Name"; Text[250])
         {
             CalcFormula = Lookup(AllObjWithCaption."Object Caption" WHERE("Object Type" = CONST(Report),
                                                                            "Object ID" = FIELD("Posting Report ID")));
