@@ -34,4 +34,8 @@ enum 51532009 "Employees Status"
     {
         Caption = 'Retired';
     }
+    value(8; Approved)
+    {
+        Caption = 'Approved';
+    }
 }

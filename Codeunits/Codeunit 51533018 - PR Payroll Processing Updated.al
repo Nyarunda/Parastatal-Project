@@ -44,13 +44,13 @@ codeunit 51533018 "PR Payroll Processing Updated"
         NSSFEMPyee: Code[20];
         NHIFEMPyer: Code[20];
         NHIFEMPyee: Code[20];
-        HREmployee: Record "HR-Employee";
+        HREmployee: Record "HR Employees";
         CoopParameters: Option "none",shares,loan,"loan Interest","Emergency loan","Emergency loan Interest","School Fees loan","School Fees loan Interest",Welfare,Pension,NSSF;
         PostingGroup: Record "prEmployee Posting Group";
         AccSchedMgt: Codeunit AccSchedManagement;
-        HREmp2: Record "HR-Employee";
+        HREmp2: Record "HR Employees";
         PRTransCode: Record "prTransaction Codes";
-        HREmployes: Record "HR-Employee";
+        HREmployes: Record "HR Employees";
         Cust2: Record Customer;
         curTransSubledger: Option " ",Customer,Vendor;
         curTransSubledgerAccount: Code[20];
@@ -63,7 +63,7 @@ codeunit 51533018 "PR Payroll Processing Updated"
         PREmpTrans_2: Record "prEmployee Transactions";
         BenifitAmount: Decimal;
         HREmpBankAC: Record "HR Employee Bank Accounts";
-        HREmp: Record "HR-Employee";
+        HREmp: Record "HR Employees";
         PRTransCodeForm: Record "prTransaction Codes";
         curDefinedContrib_2: Decimal;
         curEmployerContribution: Decimal;
@@ -1477,8 +1477,8 @@ codeunit 51533018 "PR Payroll Processing Updated"
              HREmp2.Reset;
              if HREmp2.Get(EmpCode) then
              begin
-                 "Global Dimension 1 Code":=HREmp2."Dimension 1 Code";
-                 "Global Dimension 2 Code":=HREmp2."Dimension 2 Code";
+                 "Global Dimension 1 Code":=HREmp2."Global Dimension 1 Code";
+                 "Global Dimension 2 Code":=HREmp2."Global Dimension 2 Code";
                  //:=HREmp2."Employment Type";
              end;
              //Insert Transaction Type (Either "Income or Deduction") for each Trans Being Updated
@@ -1706,7 +1706,7 @@ codeunit 51533018 "PR Payroll Processing Updated"
         CalcAddCurr: Boolean;
         AccSchedMgt: Codeunit AccSchedManagement;
     begin
-        Results:=AccSchedMgt.EvaluateExpression(true,strFormula,AccSchedLine,ColumnLayout,CalcAddCurr);
+        //Results:=AccSchedMgt.EvaluateExpression(true,strFormula,AccSchedLine,ColumnLayout,CalcAddCurr);
     end;
 
     procedure fnClosePayrollPeriod(dtOpenPeriod: Date) Closed: Boolean
@@ -1940,7 +1940,7 @@ codeunit 51533018 "PR Payroll Processing Updated"
         P9Deductions: Decimal;
         P9NetPay: Decimal;
         prPeriodTransactions: Record "prPeriod Transactions";
-        prEmployee: Record "HR-Employee";
+        prEmployee: Record "HR Employees";
     begin
         P9BasicPay := 0; P9Allowances := 0; P9Benefits := 0; P9ValueOfQuarters := 0;
         P9DefinedContribution := 0; P9OwnerOccupierInterest := 0;
@@ -2260,8 +2260,8 @@ codeunit 51533018 "PR Payroll Processing Updated"
              HREmp2.Reset;
              if HREmp2.Get(EmpCode) then
              begin
-                 "Global Dimension 1 Code":=HREmp2."Dimension 1 Code";
-                 "Global Dimension 2 Code":=HREmp."Dimension 2 Code";
+                 "Global Dimension 1 Code":=HREmp2."Global Dimension 1 Code";
+                 "Global Dimension 2 Code":=HREmp."Global Dimension 2 Code";
                  //"Contract Type":=HREmp2."Employment Type";
 
              end;
@@ -2319,7 +2319,7 @@ codeunit 51533018 "PR Payroll Processing Updated"
     procedure fnGetJournalDet(strEmpCode: Code[20])
     var
         SalaryCard: Record "prSalary Card";
-        HREmp: Record "HR-Employee";
+        HREmp: Record "HR Employees";
     begin
         //Get Payroll Posting Accounts
         //IF SalaryCard.GET(strEmpCode) THEN BEGIN
@@ -2396,7 +2396,7 @@ codeunit 51533018 "PR Payroll Processing Updated"
     var
         Steps: Integer;
         Calendar: Record Date;
-        PeriodFormMgt: Codeunit PeriodFormManagement;
+        PeriodFormMgt: Codeunit PeriodPageManagement;
     begin
         Clear(CaptionSet);
         CaptionRange := '';

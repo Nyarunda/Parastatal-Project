@@ -12,5 +12,10 @@ tableextension 51532002 "Customer Ext" extends Customer
             Caption = 'Designation';
             DataClassification = ToBeClassified;
         }
+        field(10002; "Payroll No"; Code[20])
+        {
+            Caption = 'Payroll No';
+            DataClassification = ToBeClassified;
+        }
     }
 }

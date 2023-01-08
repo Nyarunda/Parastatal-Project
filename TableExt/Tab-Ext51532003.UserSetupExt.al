@@ -38,5 +38,10 @@ tableextension 51532003 "User Setup Ext" extends "User Setup"
             Caption = 'Global Dimension 2 Code';
             DataClassification = ToBeClassified;
         }
+        field(6007; "Other Advance Staff Account"; Code[20])
+        {
+            Caption = 'Other Advance Staff Account';
+            DataClassification = ToBeClassified;
+        }
     }
 }

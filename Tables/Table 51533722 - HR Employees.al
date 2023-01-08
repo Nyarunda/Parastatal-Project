@@ -987,6 +987,9 @@ table 51533722 "HR Employees"
         field(200; "Daily Rate"; Decimal)
         {
         }
+        field(201; "Job ID"; Code[20])
+        {
+        }
         field(300; "Social Security No."; Code[20])
         {
         }
