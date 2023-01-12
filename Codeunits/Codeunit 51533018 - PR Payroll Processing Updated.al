@@ -2686,6 +2686,7 @@ codeunit 51533018 "PR Payroll Processing Updated"
     var
         Period: Record Date;
         PeriodFormMgt: Codeunit PeriodFormManagement;
+        PeriodPageMgt: Codeunit PeriodPageManagement;
         i: Integer;
     begin
         Period.SetRange("Period Start",FirstColumn,LastColumn);
@@ -2696,7 +2697,7 @@ codeunit 51533018 "PR Payroll Processing Updated"
             if ShowColumnName then
               MatrixColumnCaptions[i] := Format(Period."Period Name")
             else
-              MatrixColumnCaptions[i] := PeriodFormMgt.CreatePeriodFormat(PeriodType,Period."Period Start");
+              MatrixColumnCaptions[i] := PeriodPageMgt.CreatePeriodFormat(PeriodType,Period."Period Start");//PeriodFormMgt.CreatePeriodFormat(PeriodType,Period."Period Start");
 
             MatrixRecords[i].Copy(Period);
             i := i + 1;

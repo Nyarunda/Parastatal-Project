@@ -170,7 +170,6 @@ table 51533924 "Evaluation Committee Activity"
                 end;
             end;
 
-            end;
         }
         field(25; "RFQ No."; Code[10])
         {
